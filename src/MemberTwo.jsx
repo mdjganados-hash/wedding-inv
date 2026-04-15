@@ -9,10 +9,9 @@ import certChamp from './Membertwo/mlcert2.jpg';
 import excAward from './Membertwo/mlcert3.jpg';
 import excAward2 from './Membertwo/intrams.jpg';
 
-
 function MemberTwo() {
   const [activeTab, setActiveTab] = useState('home');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Default closed for mobile
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [selectedAchievement, setSelectedAchievement] = useState(null);
 
@@ -66,37 +65,38 @@ function MemberTwo() {
       style={{ 
         display: 'flex', minHeight: '100vh', 
         fontFamily: '"Inter", sans-serif', 
-        overflow: 'hidden', 
-        backgroundImage: `radial-gradient(circle at top right, ${theme.accent}05 0%, transparent 60%)` 
+        overflowX: 'hidden', 
+        flexDirection: 'column' // Base for mobile stacking
       }}
     >
       
-      {/* Sidebar Navigation */}
+      {/* Sidebar Navigation - Adaptive Width */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div 
             initial={{ x: -350 }} animate={{ x: 0 }} exit={{ x: -350 }}
             style={{ 
-              width: '320px', backgroundColor: theme.panel, borderRight: `1px solid ${theme.border}`, 
-              padding: '100px 30px', display: 'flex', flexDirection: 'column', zIndex: 40, position: 'fixed', height: '100vh' 
+              width: 'clamp(280px, 80vw, 320px)', backgroundColor: theme.panel, borderRight: `1px solid ${theme.border}`, 
+              padding: '80px 25px 30px 25px', display: 'flex', flexDirection: 'column', zIndex: 100, 
+              position: 'fixed', height: '100vh', boxShadow: '10px 0 30px rgba(0,0,0,0.5)' 
             }}
           >
-            <div style={{ marginBottom: '50px', borderBottom: `1px solid ${theme.border}`, paddingBottom: '30px' }}>
-              <h2 style={{ margin: '0', fontFamily: '"Playfair Display", serif', fontSize: '1.6rem', color: theme.text, textTransform: 'uppercase', letterSpacing: '1px' }}>
+            <div style={{ marginBottom: '40px', borderBottom: `1px solid ${theme.border}`, paddingBottom: '20px' }}>
+              <h2 style={{ margin: '0', fontFamily: '"Playfair Display", serif', fontSize: '1.4rem', color: theme.text, textTransform: 'uppercase', letterSpacing: '1px' }}>
                 Karl Siegfreid<br/><span style={{ color: theme.accent }}>Alinsub</span>
               </h2>
-              <p style={{ margin: '10px 0 0 0', fontSize: '0.75rem', color: theme.muted, letterSpacing: '2px', textTransform: 'uppercase' }}>System Developer</p>
+              <p style={{ margin: '8px 0 0 0', fontSize: '0.7rem', color: theme.muted, letterSpacing: '2px', textTransform: 'uppercase' }}>System Developer</p>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {tabs.map(tab => (
                 <button
-                  key={tab.id} onClick={() => setActiveTab(tab.id)}
+                  key={tab.id} onClick={() => { setActiveTab(tab.id); setIsSidebarOpen(false); }}
                   style={{ 
                     background: activeTab === tab.id ? `${theme.accent}15` : 'transparent', 
                     color: activeTab === tab.id ? theme.accent : theme.text, 
-                    border: 'none', padding: '15px', textAlign: 'left', cursor: 'pointer', 
-                    fontSize: '0.9rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: '0.3s'
+                    border: 'none', padding: '12px 15px', textAlign: 'left', cursor: 'pointer', 
+                    fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', transition: '0.3s'
                   }}
                 >
                   {activeTab === tab.id ? `// ${tab.label}` : tab.label}
@@ -107,40 +107,47 @@ function MemberTwo() {
         )}
       </AnimatePresence>
 
-      {/* Main Content Area */}
-      <div style={{ flex: 1, marginLeft: isSidebarOpen ? '320px' : '0', transition: '0.4s', padding: '100px 80px' }}>
+      {/* Main Content Area - Dynamic Margin */}
+      <div style={{ 
+        flex: 1, 
+        marginLeft: isSidebarOpen && window.innerWidth > 1024 ? '320px' : '0', 
+        transition: 'margin-left 0.4s ease', 
+        padding: 'clamp(80px, 10vh, 120px) clamp(20px, 5vw, 80px)',
+        width: '100%',
+        boxSizing: 'border-box'
+      }}>
         
-        {/* Toggle Controls */}
-        <div style={{ position: 'fixed', top: '20px', right: '30px', zIndex: 50, display: 'flex', gap: '15px', alignItems: 'center' }}>
+        {/* Toggle Controls - Fixed for Accessibility */}
+        <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 110, display: 'flex', gap: '10px', alignItems: 'center' }}>
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            style={{ background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, padding: '8px 15px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 'bold' }}
+            style={{ background: theme.panel, border: `1px solid ${theme.accent}`, color: theme.accent, padding: '8px 12px', cursor: 'pointer', fontSize: '0.65rem', fontWeight: 'bold', boxShadow: theme.shadow }}
           >
             {isSidebarOpen ? 'CLOSE INDEX' : 'OPEN INDEX'}
           </button>
           <button 
             onClick={() => setIsDarkMode(!isDarkMode)}
-            style={{ background: theme.panel, border: `1px solid ${theme.border}`, color: theme.accent, width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer' }}
+            style={{ background: theme.panel, border: `1px solid ${theme.border}`, color: theme.accent, width: '36px', height: '36px', borderRadius: '50%', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', boxShadow: theme.shadow }}
           >
             {isDarkMode ? '☀' : '☾'}
           </button>
           <Link to="/">
-            <button style={{ background: theme.accent, color: theme.bg, border: 'none', padding: '8px 20px', fontWeight: 'bold', cursor: 'pointer' }}>BACK</button>
+            <button style={{ background: theme.accent, color: theme.bg, border: 'none', padding: '8px 15px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.7rem', boxShadow: theme.shadow }}>BACK</button>
           </Link>
         </div>
 
         <AnimatePresence mode="wait">
           
           {activeTab === 'home' && (
-            <motion.div key="home" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '900px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '60px' }}>
-                <div style={{ position: 'relative' }}>
-                  <div style={{ position: 'absolute', top: '15px', left: '15px', width: '100%', height: '100%', border: `2px solid ${theme.accent}`, zIndex: 0 }}></div>
-                  <img src={karlImg} alt="Profile" style={{ width: '280px', height: '350px', objectFit: 'cover', position: 'relative', zIndex: 1, filter: 'grayscale(0.3)' }} />
+            <motion.div key="home" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '900px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', flexDirection: window.innerWidth < 768 ? 'column' : 'row', alignItems: 'center', gap: 'clamp(30px, 5vw, 60px)' }}>
+                <div style={{ position: 'relative', flexShrink: 0 }}>
+                  <div style={{ position: 'absolute', top: '10px', left: '10px', width: '100%', height: '100%', border: `2px solid ${theme.accent}`, zIndex: 0 }}></div>
+                  <img src={karlImg} alt="Profile" style={{ width: 'clamp(200px, 40vw, 280px)', height: 'auto', objectFit: 'cover', position: 'relative', zIndex: 1, filter: 'grayscale(0.3)' }} />
                 </div>
-                <div>
-                  <h1 style={{ fontFamily: '"Playfair Display", serif', fontSize: '4.5rem', margin: 0, lineHeight: 1 }}>The<br/><span style={{ color: theme.accent }}>Architect.</span></h1>
-                  <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: theme.muted, marginTop: '30px' }}>
+                <div style={{ textAlign: window.innerWidth < 768 ? 'center' : 'left' }}>
+                  <h1 style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', margin: 0, lineHeight: 1.1 }}>The<br/><span style={{ color: theme.accent }}>Architect.</span></h1>
+                  <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', lineHeight: '1.8', color: theme.muted, marginTop: '20px' }}>
                     19-year-old Computer Engineering student at TIP Manila, specializing in the fundamentals of programming and circuitry with a focus on logic design.
                   </p>
                 </div>
@@ -149,28 +156,21 @@ function MemberTwo() {
           )}
 
           {activeTab === 'about' && (
-            <motion.div key="about" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '850px' }}>
-              <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: '3rem', borderBottom: `1px solid ${theme.border}`, paddingBottom: '20px', marginBottom: '40px' }}>Identity Logs</h2>
+            <motion.div key="about" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '850px', margin: '0 auto' }}>
+              <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(2rem, 5vw, 3rem)', borderBottom: `1px solid ${theme.border}`, paddingBottom: '15px', marginBottom: '30px' }}>Identity Logs</h2>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '35px', lineHeight: '1.8' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', lineHeight: '1.8' }}>
                 <section>
-                  <h3 style={{ color: theme.accent, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '2px', marginBottom: '10px' }}>[ Personal Background ]</h3>
-                  <p>Karl Siegfreid Dela Cruz Alinsub is a 19-year-old Computer Engineering student at TIP Manila residing in Mandaluyong. Driven by curiosity and a strong determination to adapt to the evolving tech landscape, he actively seeks opportunities to expand his technical expertise. Known for his natural humor and positive energy, Karl balances a serious dedication to his craft with a competitive spirit and a drive to succeed in all areas of interest.</p>
+                  <h3 style={{ color: theme.accent, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '10px' }}>[ Personal Background ]</h3>
+                  <p style={{ fontSize: '0.95rem' }}>Karl Siegfreid Dela Cruz Alinsub is a 19-year-old Computer Engineering student at TIP Manila residing in Mandaluyong. Driven by curiosity and a strong determination to adapt to the evolving tech landscape, he actively seeks opportunities to expand his expertise.</p>
                 </section>
 
                 <section>
-                  <h3 style={{ color: theme.accent, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '2px', marginBottom: '10px' }}>[ Technical Interests ]</h3>
-                  <p>Karl has developed a deep fascination with the fundamental layers of technology, specifically <strong>Networking</strong> and <strong>Logic Circuit Design</strong>. He is particularly engaged in translating theoretical concepts like Boolean algebra into functional, hands-on designs. His technical exploration is fueled by a desire to understand systems at their most basic level, using these insights to drive innovation in the field of engineering.</p>
-                </section>
-
-                <section>
-                  <h3 style={{ color: theme.accent, textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '2px', marginBottom: '10px' }}>[ Core Competencies ]</h3>
-                  <ul style={{ listStyleType: 'none', padding: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                    <li style={{ paddingLeft: '20px', borderLeft: `2px solid ${theme.accent}` }}>Logic Circuit Architecture</li>
-                    <li style={{ paddingLeft: '20px', borderLeft: `2px solid ${theme.accent}` }}>Network Fundamentals</li>
-                    <li style={{ paddingLeft: '20px', borderLeft: `2px solid ${theme.accent}` }}>Collaborative Engineering</li>
-                    <li style={{ paddingLeft: '20px', borderLeft: `2px solid ${theme.accent}` }}>Analytical Problem-Solving</li>
-                    <li style={{ paddingLeft: '20px', borderLeft: `2px solid ${theme.accent}` }}>Strategic Pressure Management</li>
+                  <h3 style={{ color: theme.accent, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '10px' }}>[ Core Competencies ]</h3>
+                  <ul style={{ listStyleType: 'none', padding: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+                    {['Logic Circuit Architecture', 'Network Fundamentals', 'Collaborative Engineering', 'Analytical Problem-Solving'].map(skill => (
+                      <li key={skill} style={{ paddingLeft: '15px', borderLeft: `2px solid ${theme.accent}`, fontSize: '0.9rem' }}>{skill}</li>
+                    ))}
                   </ul>
                 </section>
               </div>
@@ -179,17 +179,17 @@ function MemberTwo() {
 
           {activeTab === 'achievements' && (
             <motion.div key="achievements" variants={contentVariants} initial="hidden" animate="visible" exit="exit">
-              <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: '3rem', marginBottom: '40px' }}>Milestone Records</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '25px' }}>
+              <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(2rem, 5vw, 3rem)', marginBottom: '30px' }}>Milestones</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
                 {achievementsList.map((item) => (
                   <motion.div 
                     key={item.id}
                     whileHover={{ y: -5 }}
                     onClick={() => setSelectedAchievement(item)}
-                    style={{ background: theme.panel, border: `1px solid ${theme.border}`, padding: '15px', cursor: 'pointer' }}
+                    style={{ background: theme.panel, border: `1px solid ${theme.border}`, padding: '12px', cursor: 'pointer' }}
                   >
-                    <img src={item.img} style={{ width: '100%', height: '180px', objectFit: 'cover', marginBottom: '15px' }} alt={item.title} />
-                    <h4 style={{ margin: 0, fontSize: '1rem', color: theme.accent }}>{item.title}</h4>
+                    <img src={item.img} style={{ width: '100%', height: '160px', objectFit: 'cover', marginBottom: '12px' }} alt={item.title} />
+                    <h4 style={{ margin: 0, fontSize: '0.9rem', color: theme.accent, textTransform: 'uppercase' }}>{item.title}</h4>
                   </motion.div>
                 ))}
               </div>
@@ -197,17 +197,16 @@ function MemberTwo() {
           )}
 
           {activeTab === 'connect' && (
-            <motion.div key="connect" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ textAlign: 'center', marginTop: '50px' }}>
-              <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: '4rem' }}>Establish Uplink</h2>
-              <p style={{ color: theme.muted, fontSize: '1.2rem' }}>Ready for system integration and collaboration.</p>
-              <div style={{ marginTop: '50px', display: 'flex', justifyContent: 'center', gap: '30px' }}>
-                <div style={{ padding: '30px', border: `1px solid ${theme.border}`, minWidth: '280px' }}>
-                  <p style={{ fontSize: '0.7rem', color: theme.accent, letterSpacing: '2px' }}>PRIMARY MAIL</p>
-                  <p style={{ fontWeight: 'bold', marginTop: '10px' }}>karl_alinsub@tip.edu.ph</p>
+            <motion.div key="connect" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ textAlign: 'center' }}>
+              <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}>Establish Uplink</h2>
+              <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
+                <div style={{ padding: '25px', border: `1px solid ${theme.border}`, width: '100%', maxWidth: '400px', backgroundColor: theme.panel }}>
+                  <p style={{ fontSize: '0.65rem', color: theme.accent, letterSpacing: '2px' }}>PRIMARY MAIL</p>
+                  <p style={{ fontWeight: 'bold', fontSize: '0.9rem', wordBreak: 'break-all' }}>karl_alinsub@tip.edu.ph</p>
                 </div>
-                <div style={{ padding: '30px', border: `1px solid ${theme.border}`, minWidth: '280px' }}>
-                  <p style={{ fontSize: '0.7rem', color: theme.accent, letterSpacing: '2px' }}>LOCATION</p>
-                  <p style={{ fontWeight: 'bold', marginTop: '10px' }}>Mandaluyong, Philippines</p>
+                <div style={{ padding: '25px', border: `1px solid ${theme.border}`, width: '100%', maxWidth: '400px', backgroundColor: theme.panel }}>
+                  <p style={{ fontSize: '0.65rem', color: theme.accent, letterSpacing: '2px' }}>LOCATION</p>
+                  <p style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>Mandaluyong, Philippines</p>
                 </div>
               </div>
             </motion.div>
@@ -216,18 +215,18 @@ function MemberTwo() {
         </AnimatePresence>
       </div>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox Modal - Responsive Padding */}
       <AnimatePresence>
         {selectedAchievement && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setSelectedAchievement(null)}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '40px' }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }}
           >
-            <motion.div onClick={(e) => e.stopPropagation()} style={{ background: theme.bg, border: `2px solid ${theme.accent}`, padding: '30px', maxWidth: '700px', textAlign: 'center' }}>
-              <img src={selectedAchievement.img} style={{ maxWidth: '100%', maxHeight: '60vh' }} alt="Milestone" />
-              <h3 style={{ fontFamily: '"Playfair Display", serif', fontSize: '2rem', marginTop: '20px' }}>{selectedAchievement.title}</h3>
-              <p style={{ color: theme.muted }}>{selectedAchievement.desc}</p>
+            <motion.div onClick={(e) => e.stopPropagation()} style={{ background: theme.bg, border: `2px solid ${theme.accent}`, padding: '20px', maxWidth: '600px', width: '100%', textAlign: 'center' }}>
+              <img src={selectedAchievement.img} style={{ maxWidth: '100%', maxHeight: '50vh', objectFit: 'contain' }} alt="Milestone" />
+              <h3 style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.5rem', marginTop: '15px' }}>{selectedAchievement.title}</h3>
+              <p style={{ color: theme.muted, fontSize: '0.85rem' }}>{selectedAchievement.desc}</p>
             </motion.div>
           </motion.div>
         )}

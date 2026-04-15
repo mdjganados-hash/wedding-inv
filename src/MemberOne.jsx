@@ -3,15 +3,13 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Profile Images (From assets folder)
-import jeiImg from './assets/1x1.jpg';
-import jeiImg2 from './assets/2x2.jpg';
-import jeiImg3 from './assets/2.2.jpg';
+import dwanImg from './assets/1x1.jpg';
 
 // Project & Achievement Images (From MemberOne folder, no spaces)
-import flowchartImg from './MemberOne/flowchart.png';
+import codeImg from './MemberOne/code.png';
 import troubleshootImg from './MemberOne/troubleshoot.png';
-import mlCertChamp from './MemberOne/coess.jpg';
-import mlCert2nd from './MemberOne/2nd.jpg';
+import jhscert from './MemberOne/jhscert.png';
+import shscert from './MemberOne/shscert.png';
 
 function MemberOne() {
   const [activeTab, setActiveTab] = useState('home');
@@ -52,10 +50,8 @@ function MemberOne() {
 
   // Specific Data derived from your Portfolio Document
   const achievementsData = [
-    { id: 1, img: mlCertChamp, title: 'MLBB Champion', desc: 'Participated and achieved Championship recognition in competitive gaming tournaments.' },
-    { id: 2, img: mlCert2nd, title: 'MLBB 2nd Place', desc: 'Secured 2nd Place title in Mobile Legends Championships.' },
-    { id: 3, img: jeiImg2, title: 'Hardware Config', desc: 'Visual documentation of hands-on technical activities.' },
-    { id: 4, img: jeiImg3, title: 'Logic Assembly', desc: 'Practical application of basic logic circuit knowledge.' }
+    { id: 1, img: jhscert, title: 'Academic Excellence', desc: 'With honors in Junior High School' },
+    { id: 2, img: shscert, title: 'Academic Excellence', desc: 'With honors in Senior High School' }
   ];
 
   const projectsData = [
@@ -63,7 +59,7 @@ function MemberOne() {
       id: 1,
       title: 'Algorithms & Flowcharts',
       desc: 'Created algorithms, flowcharts, and basic programs in Python and C++.',
-      img: flowchartImg
+      img: codeImg
     },
     {
       id: 2,
@@ -71,12 +67,6 @@ function MemberOne() {
       desc: 'Developed fundamental understanding in computer networking and hardware troubleshooting.',
       img: troubleshootImg
     },
-    {
-      id: 3,
-      title: 'Safety Awareness Presentations',
-      desc: 'Shared online safety awareness with peers through organized presentations.',
-      img: null
-    }
   ];
 
   const contentVariants = {
@@ -176,7 +166,7 @@ function MemberOne() {
                 
                 {/* Vintage Polaroid / Spec Sheet Image Container */}
                 <div style={{ flex: '0 0 auto', border: `12px solid #FFF`, backgroundColor: '#FFF', padding: '0px', boxShadow: theme.shadow, transform: 'rotate(-2deg)' }}>
-                  <img src={jeiImg} alt="Dwyane Jorge Ganados" style={{ width: '280px', height: '280px', objectFit: 'cover', filter: isDarkMode ? 'sepia(0.3) contrast(1.2)' : 'sepia(0.1) contrast(1.1)' }} />
+                  <img src={dwanImg} alt="Dwyane Jorge Ganados" style={{ width: '280px', height: '280px', objectFit: 'cover', filter: isDarkMode ? 'sepia(0.3) contrast(1.2)' : 'sepia(0.1) contrast(1.1)' }} />
                   <div style={{ padding: '15px 10px', backgroundColor: '#FFF', textAlign: 'center', borderTop: '2px solid #EEE' }}>
                     <p style={{ margin: 0, color: '#333', fontFamily: '"Courier New", monospace', fontSize: '0.9rem', fontWeight: 'bold', letterSpacing: '1px' }}>FIG 1. PORTRAIT</p>
                   </div>

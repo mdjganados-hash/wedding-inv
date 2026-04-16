@@ -7,7 +7,7 @@ import { ThemeContext } from './context/ThemeContext';
 import weddingSong from './Wedding Song/Canon in D - Pachelbel.mp3';
 
 // --- Import Images with Exact Repository Names ---
-import quiapoBg from './Wedding Song/Quiapo Church.jpg';
+import quiapoBg from './Wedding Song/quiapo_church-1.jpg';
 import suitExample from './Wedding Song/BlackTuxedo.jpg';
 import gownExample from './Wedding Song/Floor-Length Gown Evening gown.jpg';
 

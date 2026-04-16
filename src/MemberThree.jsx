@@ -1,33 +1,38 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react'; // Added useContext
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeContext } from './context/ThemeContext'; // Import your global context
 import sipiImg from './assets/2.2.jpg';
 
 function MemberThree() {
   const [activeTab, setActiveTab] = useState('home');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Default closed for mobile
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
 
+  // 1. PULL GLOBAL STATE (Replaces local isDarkMode useState)
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+
+  // --- New Editorial "Newsprint" Theme ---
   const lightTheme = {
-    bg: '#F4F1EA',
-    panel: '#E8E4D9',
-    accent: '#222222',
-    text: '#333333',
-    muted: '#777777',
-    border: '#222222',
+    bg: '#F4F1EA',          // Aged paper
+    panel: '#E8E4D9',       // Folded paper shadow
+    accent: '#222222',      // Ink Black
+    text: '#333333',        // Soft Black
+    muted: '#777777',       
+    border: '#222222',      // Heavy ink lines
     shadow: '6px 6px 0px rgba(0,0,0,0.1)'
   };
 
   const darkTheme = {
-    bg: '#1A1A1A',
-    panel: '#242424',
-    accent: '#E5E0D8',
-    text: '#E5E0D8',
-    muted: '#888888',
-    border: '#E5E0D8',
+    bg: '#1A1A1A',          // Dark Archive
+    panel: '#242424',       
+    accent: '#E5E0D8',      
+    text: '#E5E0D8',        
+    muted: '#888888',       
+    border: '#E5E0D8',      
     shadow: '6px 6px 0px rgba(255,255,255,0.05)'
   };
 
+  // 2. DEFINE THEME BASED ON GLOBAL STATE
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const tabs = [
@@ -107,7 +112,6 @@ function MemberThree() {
         )}
       </AnimatePresence>
 
-      {/* Main Content Area */}
       <div style={{ 
         flex: 1, 
         padding: 'clamp(60px, 8vw, 100px) clamp(20px, 5vw, 50px)',
@@ -115,9 +119,9 @@ function MemberThree() {
         boxSizing: 'border-box'
       }}>
         
-        {/* Top Controls */}
+        {/* Top Controls - Updated to use toggleTheme from context */}
         <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', gap: '10px', zIndex: 50 }}>
-            <button onClick={() => setIsDarkMode(!isDarkMode)} style={{ background: theme.bg, border: `1px solid ${theme.text}`, color: theme.text, cursor: 'pointer', padding: '5px 10px', fontSize: '0.7rem', fontWeight: 'bold' }}>
+            <button onClick={toggleTheme} style={{ background: theme.bg, border: `1px solid ${theme.text}`, color: theme.text, cursor: 'pointer', padding: '5px 10px', fontSize: '0.7rem', fontWeight: 'bold' }}>
                 {isDarkMode ? 'LIGHT' : 'DARK'}
             </button>
             <Link to="/" style={{ color: theme.text, textDecoration: 'none', fontWeight: 'bold', fontSize: '0.7rem', border: `1px solid ${theme.text}`, padding: '5px 10px' }}>
@@ -134,7 +138,6 @@ function MemberThree() {
                 <p style={{ fontSize: 'clamp(0.7rem, 2vw, 1.2rem)', margin: '10px 0', letterSpacing: '2px', textTransform: 'uppercase', fontWeight: 'bold' }}>Computer Engineering Correspondent</p>
               </div>
 
-              {/* Mobile Responsive Grid: Stack on small screens */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
                 <div style={{ border: `1px solid ${theme.border}`, padding: '10px', height: 'fit-content' }}>
                   <img src={sipiImg} alt="Sipi" style={{ width: '100%', height: 'auto', filter: 'grayscale(100%) contrast(1.1)' }} />

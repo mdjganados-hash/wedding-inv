@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react'; // Added useContext
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeContext } from './context/ThemeContext'; // Import your global context
 
 // Profile Images (From assets folder)
 import dwanImg from './assets/1x1.jpg';
@@ -13,9 +14,11 @@ import shscert from './MemberOne/shscert.png';
 
 function MemberOne() {
   const [activeTab, setActiveTab] = useState('home');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  // 1. PULL GLOBAL STATE (Replaces local useState)
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   // --- Unique "Vintage Engineer Blueprint" Theme ---
   const darkTheme = {
@@ -38,6 +41,7 @@ function MemberOne() {
     shadow: '4px 4px 0px rgba(29, 53, 87, 0.15)' // Hard retro shadow
   };
 
+  // 2. DEFINE THEME BASED ON GLOBAL STATE
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const tabs = [
@@ -48,7 +52,6 @@ function MemberOne() {
     { id: 'connect', label: 'Communications' }
   ];
 
-  // Specific Data derived from your Portfolio Document
   const achievementsData = [
     { id: 1, img: jhscert, title: 'Academic Excellence', desc: 'With honors in Junior High School' },
     { id: 2, img: shscert, title: 'Academic Excellence', desc: 'With honors in Senior High School' }
@@ -83,19 +86,17 @@ function MemberOne() {
         display: 'flex', minHeight: '100vh', 
         fontFamily: '"Inter", "Roboto", "Helvetica", sans-serif', 
         overflowX: 'hidden', 
-        flexDirection: 'column', // Base for mobile stacking
-        backgroundImage: isDarkMode 
-          ? `linear-gradient(${theme.border} 1px, transparent 1px), linear-gradient(90deg, ${theme.border} 1px, transparent 1px)` 
-          : `linear-gradient(${theme.border} 1px, transparent 1px), linear-gradient(90deg, ${theme.border} 1px, transparent 1px)`,
+        flexDirection: 'column', 
+        backgroundImage: `linear-gradient(${theme.border} 1px, transparent 1px), linear-gradient(90deg, ${theme.border} 1px, transparent 1px)`,
         backgroundSize: '40px 40px'
       }}
     >
       
-      {/* Top Controls - Fixed for constant access */}
+      {/* Top Controls - Updated to use toggleTheme */}
       <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 60, display: 'flex', gap: '10px' }}>
         <button 
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          style={{ background: theme.panel, border: `2px solid ${theme.text}`, color: theme.text, padding: '10px', width: '40px', height: '40px', cursor: 'pointer', fontSize: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', boxShadow: theme.shadow }}
+          onClick={toggleTheme}
+          style={{ background: theme.panel, border: `2px solid ${theme.text}`, color: theme.text, padding: '10px', width: '40px', height: '40px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', boxShadow: theme.shadow }}
         >
           {isDarkMode ? '☼' : '☾'}
         </button>
@@ -106,7 +107,6 @@ function MemberOne() {
         </Link>
       </div>
 
-      {/* Sidebar Overlay for Mobile */}
       <div 
         style={{ position: 'fixed', top: '20px', left: '20px', zIndex: 60 }}
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -116,7 +116,6 @@ function MemberOne() {
         </button>
       </div>
 
-      {/* Sidebar: Responsive Width and Visibility */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div 
@@ -158,7 +157,6 @@ function MemberOne() {
         )}
       </AnimatePresence>
 
-      {/* Main Content Area: Margin adjusted for responsive stacking */}
       <div style={{ 
         flex: 1, 
         padding: '100px 5% 60px 5%', 
@@ -172,12 +170,9 @@ function MemberOne() {
           
           {activeTab === 'home' && (
             <motion.div key="home" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '950px', margin: '0 auto' }}>
-              
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px', alignItems: 'center', justifyContent: 'center' }}>
-                
-                {/* Responsive Image Container */}
                 <div style={{ flex: '0 0 auto', border: `8px solid #FFF`, backgroundColor: '#FFF', padding: '0px', boxShadow: theme.shadow, transform: 'rotate(-1deg)', maxWidth: '280px', width: '100%' }}>
-                  <img src={dwanImg} alt="Dwyane Jorge Ganados" style={{ width: '100%', height: 'auto', objectFit: 'cover', filter: isDarkMode ? 'sepia(0.3) contrast(1.2)' : 'sepia(0.1) contrast(1.1)' }} />
+                  <img src={dwanImg} alt="Portrait" style={{ width: '100%', height: 'auto', objectFit: 'cover', filter: isDarkMode ? 'sepia(0.3) contrast(1.2)' : 'sepia(0.1) contrast(1.1)' }} />
                   <div style={{ padding: '10px', backgroundColor: '#FFF', textAlign: 'center', borderTop: '1px solid #EEE' }}>
                     <p style={{ margin: 0, color: '#333', fontFamily: '"Courier New", monospace', fontSize: '0.8rem', fontWeight: 'bold' }}>FIG 1. PORTRAIT</p>
                   </div>
@@ -187,7 +182,6 @@ function MemberOne() {
                   <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', margin: '0 0 20px 0', fontFamily: '"Playfair Display", serif', color: theme.text, lineHeight: '1.1' }}>
                     Dwyane Jorge <br/><span style={{ fontStyle: 'italic', color: theme.accent, fontSize: '0.7em' }}>Ganados</span>
                   </h1>
-                  
                   <div style={{ backgroundColor: theme.panel, border: `2px solid ${theme.border}`, padding: '20px', boxShadow: theme.shadow, position: 'relative' }}>
                     <p style={{ fontSize: '1rem', lineHeight: '1.8', color: theme.text, margin: 0 }}>
                       I’m a student who’s passionate about technology, problem-solving, and figuring out how things work. Whether it’s programming, computers, or strategy games, I love exploring new ideas and taking on challenges. 
@@ -201,7 +195,6 @@ function MemberOne() {
           {activeTab === 'about' && (
              <motion.div key="about" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '900px', margin: '0 auto' }}>
                <h1 style={{ fontFamily: '"Playfair Display", serif', color: theme.text, fontSize: 'clamp(1.8rem, 5vw, 3rem)', margin: '0 0 30px 0', borderBottom: `4px double ${theme.border}`, paddingBottom: '15px' }}>Biographical Data</h1>
-
                <div style={{ backgroundColor: theme.panel, padding: 'clamp(20px, 5vw, 40px)', border: `2px solid ${theme.border}`, boxShadow: theme.shadow, lineHeight: '1.8', fontSize: '1rem', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                  <p style={{ margin: 0 }}>
                    <strong style={{ fontFamily: '"Courier New", monospace', color: theme.accent, textTransform: 'uppercase', fontSize: '0.9rem' }}>[ Personal Background ]</strong><br/>
@@ -241,14 +234,10 @@ function MemberOne() {
           {activeTab === 'projects' && (
              <motion.div key="projects" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '1000px', margin: '0 auto' }}>
                <h1 style={{ fontFamily: '"Playfair Display", serif', color: theme.text, fontSize: 'clamp(1.8rem, 5vw, 3rem)', margin: '0 0 10px 0' }}>Schematics</h1>
-               <p style={{ color: theme.muted, fontFamily: '"Courier New", monospace', marginBottom: '30px', fontSize: '0.8rem' }}>&gt; DISPLAYING ARCHIVED FILES...</p>
-
                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '30px' }}>
                  {[...projectsData, ...achievementsData].map((item, idx) => (
                    <motion.div key={idx} style={{ backgroundColor: theme.panel, border: `2px solid ${theme.text}`, padding: '15px', boxShadow: theme.shadow, display: 'flex', flexDirection: 'column' }}>
-                     <div style={{ borderBottom: `1px solid ${theme.border}`, paddingBottom: '10px', marginBottom: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                        <h3 style={{ margin: 0, fontSize: '1.2rem', color: theme.accent }}>{item.title}</h3>
-                     </div>
+                     <h3 style={{ margin: "0 0 15px 0", fontSize: '1.2rem', color: theme.accent }}>{item.title}</h3>
                      <img src={item.img} alt={item.title} style={{ width: '100%', height: '180px', objectFit: 'cover', marginBottom: '15px', border: `1px solid ${theme.border}` }} />
                      <p style={{ margin: '0', fontSize: '0.9rem', flexGrow: 1 }}>{item.desc}</p>
                    </motion.div>
@@ -260,7 +249,6 @@ function MemberOne() {
           {activeTab === 'connect' && (
             <motion.div key="connect" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '800px', margin: '0 auto' }}>
               <h1 style={{ fontFamily: '"Playfair Display", serif', color: theme.text, fontSize: 'clamp(1.8rem, 5vw, 3rem)', margin: '0 0 30px 0', borderBottom: `4px double ${theme.border}`, paddingBottom: '15px' }}>Communications</h1>
-
               <div style={{ backgroundColor: theme.panel, border: `2px solid ${theme.text}`, padding: 'clamp(20px, 5vw, 40px)', boxShadow: theme.shadow }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
                   <div style={{ border: `1px solid ${theme.border}`, padding: '15px', backgroundColor: theme.bg }}>
@@ -279,7 +267,6 @@ function MemberOne() {
         </AnimatePresence>
       </div>
 
-      {/* Lightbox: Responsive Modal */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react'; // Added useContext
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeContext } from './context/ThemeContext'; // Import your context
 import karlImg from './assets/2x2.jpg';
 
 // Importing Achievement Images
@@ -11,9 +12,11 @@ import excAward2 from './Membertwo/intrams.jpg';
 
 function MemberTwo() {
   const [activeTab, setActiveTab] = useState('home');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Default closed for mobile
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   const [selectedAchievement, setSelectedAchievement] = useState(null);
+
+  // 1. PULL GLOBAL STATE (Replaces local isDarkMode useState)
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   // --- The System Architect / Emerald & Gold Theme ---
   const darkTheme = {
@@ -36,6 +39,7 @@ function MemberTwo() {
     shadow: '0 10px 30px rgba(27, 67, 50, 0.08)'
   };
 
+  // 2. DEFINE THEME BASED ON GLOBAL STATE
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const tabs = [
@@ -66,11 +70,11 @@ function MemberTwo() {
         display: 'flex', minHeight: '100vh', 
         fontFamily: '"Inter", sans-serif', 
         overflowX: 'hidden', 
-        flexDirection: 'column' // Base for mobile stacking
+        flexDirection: 'column' 
       }}
     >
       
-      {/* Sidebar Navigation - Adaptive Width */}
+      {/* Sidebar Navigation */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div 
@@ -107,7 +111,7 @@ function MemberTwo() {
         )}
       </AnimatePresence>
 
-      {/* Main Content Area - Dynamic Margin */}
+      {/* Main Content Area */}
       <div style={{ 
         flex: 1, 
         marginLeft: isSidebarOpen && window.innerWidth > 1024 ? '320px' : '0', 
@@ -117,7 +121,7 @@ function MemberTwo() {
         boxSizing: 'border-box'
       }}>
         
-        {/* Toggle Controls - Fixed for Accessibility */}
+        {/* Toggle Controls - Updated to use toggleTheme from context */}
         <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 110, display: 'flex', gap: '10px', alignItems: 'center' }}>
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -126,7 +130,7 @@ function MemberTwo() {
             {isSidebarOpen ? 'CLOSE INDEX' : 'OPEN INDEX'}
           </button>
           <button 
-            onClick={() => setIsDarkMode(!isDarkMode)}
+            onClick={toggleTheme}
             style={{ background: theme.panel, border: `1px solid ${theme.border}`, color: theme.accent, width: '36px', height: '36px', borderRadius: '50%', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', boxShadow: theme.shadow }}
           >
             {isDarkMode ? '☀' : '☾'}
@@ -215,7 +219,7 @@ function MemberTwo() {
         </AnimatePresence>
       </div>
 
-      {/* Lightbox Modal - Responsive Padding */}
+      {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedAchievement && (
           <motion.div

@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react'; // Added useContext
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { ThemeContext } from './context/ThemeContext'; // Import your context
 
 // Import the wedding song
 import weddingSong from './Wedding Song/Canon in D - Pachelbel.mp3';
@@ -11,7 +12,9 @@ import suitExample from './Wedding Song/BlackTuxedo.jpg';
 import gownExample from './Wedding Song/Floor-Length Gown Evening gown.jpg';
 
 function WeddingInvite() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  // 1. PULL GLOBAL STATE (Replaces local isDarkMode useState)
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+  
   const [rsvpCount, setRsvpCount] = useState(142);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   
@@ -38,6 +41,7 @@ function WeddingInvite() {
     border: '#E5E5E5'
   };
 
+  // 2. DEFINE THEME BASED ON GLOBAL STATE
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const handleRsvpSubmit = (e) => {
@@ -114,7 +118,8 @@ function WeddingInvite() {
           <button onClick={toggleAudio} style={{ background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, borderRadius: '50%', width: '35px', height: '35px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1rem' }}>
             {isPlaying ? '⏸' : '♪'}
           </button>
-          <button onClick={() => setIsDarkMode(!isDarkMode)} style={{ background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, borderRadius: '50%', width: '35px', height: '35px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {/* Updated to use toggleTheme from context */}
+          <button onClick={toggleTheme} style={{ background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, borderRadius: '50%', width: '35px', height: '35px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {isDarkMode ? '☼' : '☾'}
           </button>
         </div>
@@ -128,6 +133,7 @@ function WeddingInvite() {
           <h1 style={{ fontSize: 'clamp(3rem, 12vw, 7rem)', margin: '10px 0', fontWeight: 'normal', lineHeight: '1', color: theme.textMain, letterSpacing: 'clamp(5px, 2vw, 15px)' }}>DEXTER</h1>
           <div style={{ fontSize: 'clamp(1.5rem, 4vw, 3rem)', fontStyle: 'italic', color: theme.accent, margin: '5px 0' }}>and</div>
           <h1 style={{ fontSize: 'clamp(3rem, 12vw, 7rem)', margin: '10px 0', fontWeight: 'normal', lineHeight: '1', color: theme.textMain, letterSpacing: 'clamp(5px, 2vw, 15px)' }}>RITA</h1>
+          <p style={{ fontSize: 'clamp(0.9rem, 2.5vw, 1.3rem)', fontStyle: 'italic', color: theme.textMuted, margin: '20px 0' }}>Request the honour of your presence</p>
           <p style={{ textTransform: 'uppercase', letterSpacing: 'clamp(3px, 1vw, 8px)', fontSize: 'clamp(0.75rem, 2vw, 1.1rem)', color: theme.accent }}>01 NOVEMBER 2026</p>
         </div>
       </div>
@@ -156,7 +162,7 @@ function WeddingInvite() {
         </div>
       </div>
 
-      {/* 3. MAP - FIXED URL */}
+      {/* 3. MAP */}
       <div style={{ ...sectionStyle, backgroundColor: theme.panelBg }}>
         <h2 style={sectionTitle}>Getting There</h2>
         <div style={{ width: '100%', height: 'clamp(300px, 50vh, 500px)', border: `1px solid ${theme.accent}`, position: 'relative' }}>
@@ -197,7 +203,7 @@ function WeddingInvite() {
         </div>
       </div>
 
-      {/* 6. PARENTS SECTION (Restored) */}
+      {/* 6. PARENTS SECTION */}
       <div style={{ ...sectionStyle, backgroundColor: theme.panelBg }}>
         <p style={sectionSubtitle}>The Wedding Party</p>
         <h2 style={sectionTitle}>Our Families</h2>
@@ -220,7 +226,7 @@ function WeddingInvite() {
         </div>
       </div>
 
-{/* 8. RSVP - GUEST INFO REMOVED */}
+      {/* 8. RSVP */}
       <div style={{ ...sectionStyle, backgroundColor: theme.panelBg }}>
         <p style={sectionSubtitle}>Your Response</p>
         <h2 style={sectionTitle}>RSVP</h2>
@@ -233,11 +239,11 @@ function WeddingInvite() {
               <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
                 <div style={{ flex: '1 1 300px' }}>
                   <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '15px' }}>First Name</label>
-                  <input required type="text" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `1px solid ${theme.border}`, padding: '15px 0', color: theme.textMain, fontSize: '1.1rem', outline: 'none', fontFamily: 'inherit' }} />
+                  <input required type="text" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `2px solid ${theme.border}`, padding: '15px 0', color: theme.textMain, fontSize: '1.1rem', outline: 'none', fontFamily: 'inherit' }} />
                 </div>
                 <div style={{ flex: '1 1 300px' }}>
                   <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '15px' }}>Last Name</label>
-                  <input required type="text" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `1px solid ${theme.border}`, padding: '15px 0', color: theme.textMain, fontSize: '1.1rem', outline: 'none', fontFamily: 'inherit' }} />
+                  <input required type="text" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `2px solid ${theme.border}`, padding: '15px 0', color: theme.textMain, fontSize: '1.1rem', outline: 'none', fontFamily: 'inherit' }} />
                 </div>
               </div>
 

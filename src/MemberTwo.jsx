@@ -11,7 +11,7 @@ import excAward from './Membertwo/mlcert3.jpg';
 import excAward2 from './Membertwo/intrams.jpg';
 import projectOneImg from './Membertwo/p1.jpg';
 import projectTwoImg from './Membertwo/p2.jpg';
-import visualArchiveImg from './Membertwo/P3.jpg';
+import visualArchiveImg from './Membertwo/p3.jpg';
 
 function MemberTwo() {
   const [activeTab, setActiveTab] = useState('home');

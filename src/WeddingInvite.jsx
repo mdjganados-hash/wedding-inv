@@ -1,7 +1,7 @@
-import { useState, useRef, useContext } from 'react'; // Added useContext
+import { useState, useRef, useContext, useEffect } from 'react'; // Added useEffect
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ThemeContext } from './context/ThemeContext'; // Import your context
+import { motion, AnimatePresence } from 'framer-motion'; 
+import { ThemeContext } from './context/ThemeContext';
 
 // Import the wedding song
 import weddingSong from './Wedding Song/Canon in D - Pachelbel.mp3';
@@ -12,15 +12,27 @@ import suitExample from './Wedding Song/BlackTuxedo.jpg';
 import gownExample from './Wedding Song/Floor-Length Gown Evening gown.jpg';
 
 function WeddingInvite() {
-  // 1. PULL GLOBAL STATE (Replaces local isDarkMode useState)
-  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+  // 1. PULL GLOBAL STATE
+  const themeContext = useContext(ThemeContext);
+  const isDarkMode = themeContext?.isDarkMode;
+  const toggleTheme = themeContext?.toggleTheme;
   
-  const [rsvpCount, setRsvpCount] = useState(142);
+  // 2. RSVP COUNT LOGIC (Loads from localStorage so it stays on restart)
+  const [rsvpCount, setRsvpCount] = useState(() => {
+    const savedCount = localStorage.getItem('wedding_rsvp_count');
+    return savedCount ? parseInt(savedCount) : 0; 
+  });
+  
   const [hasSubmitted, setHasSubmitted] = useState(false);
   
   // Audio state and ref
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
+
+  // SAVE TO LOCAL STORAGE whenever count changes
+  useEffect(() => {
+    localStorage.setItem('wedding_rsvp_count', rsvpCount);
+  }, [rsvpCount]);
 
   // --- Premium Royal Gallery Palette ---
   const darkTheme = {
@@ -41,12 +53,17 @@ function WeddingInvite() {
     border: '#E5E5E5'
   };
 
-  // 2. DEFINE THEME BASED ON GLOBAL STATE
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const handleRsvpSubmit = (e) => {
     e.preventDefault();
-    setRsvpCount(prev => prev + 1);
+    const formData = new FormData(e.target);
+    const attendance = formData.get('attend');
+    
+    if (attendance === 'yes') {
+      setRsvpCount(prev => prev + 1);
+    }
+    
     setHasSubmitted(true);
   };
 
@@ -59,7 +76,7 @@ function WeddingInvite() {
     setIsPlaying(!isPlaying);
   };
 
-  // Common Styles (Mobile Responsive)
+  // Common Styles
   const sectionStyle = {
     padding: 'clamp(60px, 10vh, 120px) 20px', 
     borderBottom: `1px solid ${theme.border}`,
@@ -106,7 +123,6 @@ function WeddingInvite() {
       transition={{ duration: 0.8 }}
       style={{ fontFamily: '"Playfair Display", "Georgia", serif', minHeight: '100vh', overflowX: 'hidden' }}
     >
-      
       <audio ref={audioRef} src={weddingSong} loop />
 
       {/* Navigation */}
@@ -118,7 +134,6 @@ function WeddingInvite() {
           <button onClick={toggleAudio} style={{ background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, borderRadius: '50%', width: '35px', height: '35px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1rem' }}>
             {isPlaying ? '⏸' : '♪'}
           </button>
-          {/* Updated to use toggleTheme from context */}
           <button onClick={toggleTheme} style={{ background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, borderRadius: '50%', width: '35px', height: '35px', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {isDarkMode ? '☼' : '☾'}
           </button>
@@ -167,7 +182,7 @@ function WeddingInvite() {
         <h2 style={sectionTitle}>Getting There</h2>
         <div style={{ width: '100%', height: 'clamp(300px, 50vh, 500px)', border: `1px solid ${theme.accent}`, position: 'relative' }}>
            <iframe 
-             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.164366699566!2d120.9811553761001!3d14.598270185888204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397ca1ce6295325%3A0x6b49e17c09345e69!2sMinor%20Basilica%20of%20the%20Black%20Nazarene!5e0!3m2!1sen!2sph!4v1700000000000!5m2!1sen!2sph" 
+             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.1685350414456!2d120.98188157580637!3d14.598651877332356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397ca1808603681%3A0x6a053070d655f412!2sQuiapo%20Church!5e0!3m2!1sen!2sph!4v1700000000000" 
              width="100%" height="100%" style={{ border: 0, filter: isDarkMode ? 'invert(90%) hue-rotate(180deg)' : 'none' }} allowFullScreen="" loading="lazy">
            </iframe>
         </div>
@@ -179,7 +194,7 @@ function WeddingInvite() {
           <p style={{ fontSize: 'clamp(1rem, 3vw, 1.2rem)', lineHeight: '2', maxWidth: '800px', margin: '0 auto' }}>A sanctuary of deep faith and historical resonance.</p>
       </div>
 
-      {/* 5. FULL PROGRAMME */}
+      {/* 5. PROGRAMME */}
       <div style={sectionStyle}>
         <h2 style={sectionTitle}>Programme</h2>
         <div style={{ maxWidth: '700px', margin: '0 auto' }}>
@@ -233,46 +248,67 @@ function WeddingInvite() {
         <p style={{ color: theme.textMuted, fontStyle: 'italic', marginBottom: '40px' }}>Kindly respond by the 1st of October, 2026</p>
 
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          {!hasSubmitted ? (
-            <form onSubmit={handleRsvpSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '40px', textAlign: 'left' }}>
-              
-              <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-                <div style={{ flex: '1 1 300px' }}>
-                  <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '15px' }}>First Name</label>
-                  <input required type="text" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `2px solid ${theme.border}`, padding: '15px 0', color: theme.textMain, fontSize: '1.1rem', outline: 'none', fontFamily: 'inherit' }} />
-                </div>
-                <div style={{ flex: '1 1 300px' }}>
-                  <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '15px' }}>Last Name</label>
-                  <input required type="text" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `2px solid ${theme.border}`, padding: '15px 0', color: theme.textMain, fontSize: '1.1rem', outline: 'none', fontFamily: 'inherit' }} />
-                </div>
-              </div>
-
-              <div>
-                <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '20px' }}>Will you join us?</label>
+          <AnimatePresence mode="wait">
+            {!hasSubmitted ? (
+              <motion.form 
+                key="form"
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }}
+                onSubmit={handleRsvpSubmit} 
+                style={{ display: 'flex', flexDirection: 'column', gap: '40px', textAlign: 'left' }}
+              >
                 <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-                  <label style={{ flex: '1 1 200px', border: `1px solid ${theme.accent}`, padding: '25px', textAlign: 'center', cursor: 'pointer', color: theme.textMain, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px' }}>
-                    <input type="radio" name="attend" value="yes" required style={{ marginRight: '15px' }} /> Accepts
-                  </label>
-                  <label style={{ flex: '1 1 200px', border: `1px solid ${theme.border}`, padding: '25px', textAlign: 'center', cursor: 'pointer', color: theme.textMuted, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px' }}>
-                    <input type="radio" name="attend" value="no" style={{ marginRight: '15px' }} /> Declines
-                  </label>
+                  <div style={{ flex: '1 1 300px' }}>
+                    <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '15px' }}>First Name</label>
+                    <input required name="fname" type="text" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `2px solid ${theme.border}`, padding: '15px 0', color: theme.textMain, fontSize: '1.1rem', outline: 'none', fontFamily: 'inherit' }} />
+                  </div>
+                  <div style={{ flex: '1 1 300px' }}>
+                    <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '15px' }}>Last Name</label>
+                    <input required name="lname" type="text" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `2px solid ${theme.border}`, padding: '15px 0', color: theme.textMain, fontSize: '1.1rem', outline: 'none', fontFamily: 'inherit' }} />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '15px' }}>Notes</label>
-                <textarea placeholder="Special requests..." rows="4" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `2px solid ${theme.border}`, color: theme.textMain, padding: '15px 0', fontSize: '1.1rem', outline: 'none', resize: 'none' }}></textarea>
-              </div>
+                <div>
+                  <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '20px' }}>Will you join us?</label>
+                  <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                    <label style={{ flex: '1 1 200px', border: `1px solid ${theme.accent}`, padding: '25px', textAlign: 'center', cursor: 'pointer', color: theme.textMain, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px' }}>
+                      <input type="radio" name="attend" value="yes" required style={{ marginRight: '15px' }} /> Accepts
+                    </label>
+                    <label style={{ flex: '1 1 200px', border: `1px solid ${theme.border}`, padding: '25px', textAlign: 'center', cursor: 'pointer', color: theme.textMuted, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px' }}>
+                      <input type="radio" name="attend" value="no" style={{ marginRight: '15px' }} /> Declines
+                    </label>
+                  </div>
+                </div>
 
-              <button type="submit" style={{ background: theme.accent, color: theme.bg, border: 'none', padding: '25px', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '5px', fontSize: '1rem', fontWeight: 'bold' }}>Submit</button>
-            </form>
-          ) : (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ border: `1px solid ${theme.accent}`, padding: '80px 40px', background: theme.bg }}>
-              <div style={{ fontSize: '4rem', color: theme.accent }}>❦</div>
-              <h3 style={{ fontSize: '2rem' }}>RESPONSE SEALED</h3>
-            </motion.div>
-          )}
-          <p style={{ marginTop: '80px', fontStyle: 'italic' }}><strong style={{ color: theme.accent }}>{rsvpCount}</strong> Honored Guests Attending</p>
+                <div>
+                  <label style={{ display: 'block', color: theme.accent, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '15px' }}>Notes</label>
+                  <textarea placeholder="Special requests..." rows="4" style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: `2px solid ${theme.border}`, color: theme.textMain, padding: '15px 0', fontSize: '1.1rem', outline: 'none', resize: 'none' }}></textarea>
+                </div>
+
+                <button type="submit" style={{ background: theme.accent, color: theme.bg, border: 'none', padding: '25px', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '5px', fontSize: '1rem', fontWeight: 'bold' }}>Submit</button>
+              </motion.form>
+            ) : (
+              <motion.div 
+                key="thanks"
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                style={{ border: `1px solid ${theme.accent}`, padding: '80px 40px', background: theme.bg }}
+              >
+                <div style={{ fontSize: '4rem', color: theme.accent }}>❦</div>
+                <h3 style={{ fontSize: '2rem', marginBottom: '20px' }}>RESPONSE SEALED</h3>
+                <button 
+                  onClick={() => setHasSubmitted(false)}
+                  style={{ background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, padding: '10px 20px', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.7rem' }}
+                >
+                  Submit Another Guest
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <p style={{ marginTop: '80px', fontStyle: 'italic' }}>
+            <strong style={{ color: theme.accent, fontSize: '1.5rem' }}>{rsvpCount}</strong> Honored Guests Attending
+          </p>
         </div>
       </div>
 

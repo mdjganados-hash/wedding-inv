@@ -1,12 +1,12 @@
-import { useState, useContext } from 'react'; // Added useContext
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ThemeContext } from './context/ThemeContext'; // Import your global context
+import { ThemeContext } from './context/ThemeContext';
 
-// Profile Images (From assets folder)
+// Profile Images
 import dwanImg from './assets/1x1.jpg';
 
-// Project & Achievement Images (From MemberOne folder, no spaces)
+// Project & Achievement Images
 import codeImg from './MemberOne/code.png';
 import troubleshootImg from './MemberOne/troubleshoot.png';
 import jhscert from './MemberOne/jhscert.png';
@@ -17,38 +17,36 @@ function MemberOne() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  // 1. PULL GLOBAL STATE (Replaces local useState)
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
-  // --- Unique "Vintage Engineer Blueprint" Theme ---
   const darkTheme = {
-    bg: '#423414',          // Deep Blueprint Paper
-    panel: '#433b15',       // Slightly lighter blueprint paper
-    accent: '#E6C229',      // Antique Brass / Gold
-    text: '#EAEAEA',        // ink
-    muted: '#8aaebd',       // Faded blueprint ink
-    border: '#704b07',      // Grid lines
-    shadow: '4px 4px 0px rgba(0, 0, 0, 0.5)' // Hard retro shadow
+    bg: '#423414',
+    panel: '#433b15',
+    accent: '#E6C229',
+    text: '#EAEAEA',
+    muted: '#8aaebd',
+    border: '#704b07',
+    shadow: '4px 4px 0px rgba(0, 0, 0, 0.5)'
   };
 
   const lightTheme = {
-    bg: '#F5F2EB',          // Vintage Draft Paper
-    panel: '#EBE5D9',       // Lighter paper layer
-    accent: '#57321d',      // Dark Navy ink
-    text: '#42332b',        // Typewriter black
-    muted: '#7a9494',       // Faded text
-    border: '#D0C8B6',      // Pencil lines
-    shadow: '4px 4px 0px rgba(29, 53, 87, 0.15)' // Hard retro shadow
+    bg: '#F5F2EB',
+    panel: '#EBE5D9',
+    accent: '#57321d',
+    text: '#42332b',
+    muted: '#7a9494',
+    border: '#D0C8B6',
+    shadow: '4px 4px 0px rgba(29, 53, 87, 0.15)'
   };
 
-  // 2. DEFINE THEME BASED ON GLOBAL STATE
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const tabs = [
     { id: 'home', label: 'Technical Profile' },
     { id: 'about', label: 'Biographical Data' },
     { id: 'journey', label: 'Experience Logs' },
-    { id: 'projects', label: 'Schematics & Records' }, 
+    { id: 'records', label: 'Schematics & Records' }, // Renamed from projects to avoid confusion
+    { id: 'webprojects', label: 'Project Terminal' }, // NEW TAB
     { id: 'connect', label: 'Communications' }
   ];
 
@@ -57,7 +55,7 @@ function MemberOne() {
     { id: 2, img: shscert, title: 'Academic Excellence', desc: 'With honors in Senior High School' }
   ];
 
-  const projectsData = [
+  const staticRecords = [
     {
       id: 1,
       title: 'Algorithms & Flowcharts',
@@ -70,6 +68,24 @@ function MemberOne() {
       desc: 'Developed fundamental understanding in computer networking and hardware troubleshooting.',
       img: troubleshootImg
     },
+  ];
+
+  // NEW: Blank placeholders for your Vercel/GitHub projects
+  const webProjectsData = [
+    {
+      id: 1,
+      title: 'Enrollment System UI',
+      desc: 'A modern user interface for a student enrollment system.',
+      vercel: 'https://enrollment-ui-design-eta.vercel.app',
+      github: 'https://github.com/mdjganados-hash/enrollment-ui-design'
+    },
+    {
+      id: 2,
+      title: 'Crypto Pulse',
+      desc: 'A real-time cryptocurrency tracking application.',
+      vercel: 'https://crypto-pulse-self.vercel.app',
+      github: 'https://github.com/mdjganados-hash/crypto-pulse'
+    }
   ];
 
   const contentVariants = {
@@ -92,7 +108,7 @@ function MemberOne() {
       }}
     >
       
-      {/* Top Controls - Updated to use toggleTheme */}
+      {/* Top Controls */}
       <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 60, display: 'flex', gap: '10px' }}>
         <button 
           onClick={toggleTheme}
@@ -107,6 +123,7 @@ function MemberOne() {
         </Link>
       </div>
 
+      {/* Menu Toggle */}
       <div 
         style={{ position: 'fixed', top: '20px', left: '20px', zIndex: 60 }}
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -116,6 +133,7 @@ function MemberOne() {
         </button>
       </div>
 
+      {/* Sidebar Navigation */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div 
@@ -157,6 +175,7 @@ function MemberOne() {
         )}
       </AnimatePresence>
 
+      {/* Main Content Area */}
       <div style={{ 
         flex: 1, 
         padding: '100px 5% 60px 5%', 
@@ -168,6 +187,7 @@ function MemberOne() {
       }}>
         <AnimatePresence mode="wait">
           
+          {/* TECHNICAL PROFILE */}
           {activeTab === 'home' && (
             <motion.div key="home" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '950px', margin: '0 auto' }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px', alignItems: 'center', justifyContent: 'center' }}>
@@ -177,14 +197,13 @@ function MemberOne() {
                     <p style={{ margin: 0, color: '#333', fontFamily: '"Courier New", monospace', fontSize: '0.8rem', fontWeight: 'bold' }}>FIG 1. PORTRAIT</p>
                   </div>
                 </div>
-
                 <div style={{ flex: '1 1 300px', textAlign: window.innerWidth < 768 ? 'center' : 'left' }}>
                   <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', margin: '0 0 20px 0', fontFamily: '"Playfair Display", serif', color: theme.text, lineHeight: '1.1' }}>
                     Dwyane Jorge <br/><span style={{ fontStyle: 'italic', color: theme.accent, fontSize: '0.7em' }}>Ganados</span>
                   </h1>
                   <div style={{ backgroundColor: theme.panel, border: `2px solid ${theme.border}`, padding: '20px', boxShadow: theme.shadow, position: 'relative' }}>
                     <p style={{ fontSize: '1rem', lineHeight: '1.8', color: theme.text, margin: 0 }}>
-                      I’m a student who’s passionate about technology, problem-solving, and figuring out how things work. Whether it’s programming, computers, or strategy games, I love exploring new ideas and taking on challenges. 
+                      I’m a student who’s passionate about technology, problem-solving, and figuring out how things work. Whether it’s programming, computers, or strategy games, I love exploring new ideas and taking on challenges. Learning new skills keeps me motivated, even when it gets tricky. I’d describe myself as curious, determined, and friendly. I give respect where it’s earned, and I try to approach problems thoughtfully—but I won’t lie, I can be a bit procrastinatic at times. I see mistakes as learning opportunities, and each one helps me grow both academically and personally.
                     </p>
                   </div>
                 </div>
@@ -192,25 +211,33 @@ function MemberOne() {
             </motion.div>
           )}
 
+          {/* BIOGRAPHICAL DATA */}
           {activeTab === 'about' && (
              <motion.div key="about" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '900px', margin: '0 auto' }}>
                <h1 style={{ fontFamily: '"Playfair Display", serif', color: theme.text, fontSize: 'clamp(1.8rem, 5vw, 3rem)', margin: '0 0 30px 0', borderBottom: `4px double ${theme.border}`, paddingBottom: '15px' }}>Biographical Data</h1>
                <div style={{ backgroundColor: theme.panel, padding: 'clamp(20px, 5vw, 40px)', border: `2px solid ${theme.border}`, boxShadow: theme.shadow, lineHeight: '1.8', fontSize: '1rem', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                  <p style={{ margin: 0 }}>
                    <strong style={{ fontFamily: '"Courier New", monospace', color: theme.accent, textTransform: 'uppercase', fontSize: '0.9rem' }}>[ Personal Background ]</strong><br/>
-                   Dwyane Jorge R. Ganados was born on July 8, 2006, in Manila. He spent most of his childhood growing up in Puerto Princesa City, Palawan. Currently residing in Manila for his college education.
+                   Dwyane Jorge R. Ganados was born on July 8, 2006, in Manila. He spent most of his childhood growing up in Puerto Princesa City, Palawan, where he developed his early experiences and values. For his college education, he is currently residing in Manila to pursue his studies and further expand his knowledge in the field of technology.
+                 </p>
+                 <p style={{ margin: 0, paddingTop: '15px', borderTop: `1px dashed ${theme.border}` }}>
+                   <strong style={{ fontFamily: '"Courier New", monospace', color: theme.accent, textTransform: 'uppercase', fontSize: '0.9rem' }}>[ Technical Interests ]</strong><br/>
+                   At a very young age, Dwyane Jorge R. Ganados was instantly captivated by gadgets and technology. His curiosity about how devices work led him to explore electronics and hands-on activities throughout his school years. He developed a strong interest in understanding hardware configurations, such as computers and televisions, as well as learning basic logic circuits and emerging technologies.
                  </p>
                  <p style={{ margin: 0, paddingTop: '15px', borderTop: `1px dashed ${theme.border}` }}>
                    <strong style={{ fontFamily: '"Courier New", monospace', color: theme.accent, textTransform: 'uppercase', fontSize: '0.9rem' }}>[ Core Competencies ]</strong><br/>
                    • Communication Skills<br/>
                    • Basic Coding (C++, HTML, CSS, PYTHON)<br/>
                    • Logic Circuit Knowledge<br/>
-                   • Computer Hardware Building
+                   • Computer Hardware Building<br/>
+                   • Problem-Solving and Critical Thinking<br/>
+                   • Adaptability and Teamwork
                  </p>
                </div>
              </motion.div>
           )}
 
+          {/* EXPERIENCE LOGS */}
           {activeTab === 'journey' && (
              <motion.div key="journey" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '900px', margin: '0 auto' }}>
                 <h1 style={{ fontFamily: '"Playfair Display", serif', color: theme.text, fontSize: 'clamp(1.8rem, 5vw, 3rem)', margin: '0 0 30px 0', borderBottom: `4px double ${theme.border}`, paddingBottom: '15px' }}>Experience Logs</h1>
@@ -220,7 +247,10 @@ function MemberOne() {
                     "Basic logic circuits",
                     "Building a PC",
                     "Vice President in SHS",
-                    "Online safety awareness"
+                    "Volunteer in cleaning during SHS",
+                    "Math and spelling competitions",
+                    "Joining local tournaments",
+                    "Online safety awareness presentations"
                   ].map((exp, idx) => (
                     <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: theme.panel, border: `2px solid ${theme.border}`, padding: '15px', boxShadow: theme.shadow }}>
                       <span style={{ color: theme.accent, fontFamily: '"Courier New", monospace', fontSize: '1rem', fontWeight: 'bold' }}>{String(idx + 1).padStart(2, '0')}.</span>
@@ -231,14 +261,16 @@ function MemberOne() {
              </motion.div>
           )}
 
-          {activeTab === 'projects' && (
-             <motion.div key="projects" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '1000px', margin: '0 auto' }}>
-               <h1 style={{ fontFamily: '"Playfair Display", serif', color: theme.text, fontSize: 'clamp(1.8rem, 5vw, 3rem)', margin: '0 0 10px 0' }}>Schematics</h1>
+          {/* SCHEMATICS & RECORDS */}
+          {activeTab === 'records' && (
+             <motion.div key="records" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+               <h1 style={{ fontFamily: '"Playfair Display", serif', color: theme.text, fontSize: 'clamp(1.8rem, 5vw, 3rem)', margin: '0 0 10px 0' }}>Schematics & Records</h1>
+               <p style={{ color: theme.muted, fontFamily: '"Courier New", monospace', marginBottom: '30px', fontSize: '0.8rem' }}>&gt; DISPLAYING ARCHIVED TECHNICAL FILES...</p>
                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '30px' }}>
-                 {[...projectsData, ...achievementsData].map((item, idx) => (
+                 {[...staticRecords, ...achievementsData].map((item, idx) => (
                    <motion.div key={idx} style={{ backgroundColor: theme.panel, border: `2px solid ${theme.text}`, padding: '15px', boxShadow: theme.shadow, display: 'flex', flexDirection: 'column' }}>
                      <h3 style={{ margin: "0 0 15px 0", fontSize: '1.2rem', color: theme.accent }}>{item.title}</h3>
-                     <img src={item.img} alt={item.title} style={{ width: '100%', height: '180px', objectFit: 'cover', marginBottom: '15px', border: `1px solid ${theme.border}` }} />
+                     <img src={item.img} alt={item.title} onClick={() => setSelectedImage(item.img)} style={{ width: '100%', height: '180px', objectFit: 'cover', marginBottom: '15px', border: `1px solid ${theme.border}`, cursor: 'pointer' }} />
                      <p style={{ margin: '0', fontSize: '0.9rem', flexGrow: 1 }}>{item.desc}</p>
                    </motion.div>
                  ))}
@@ -246,6 +278,43 @@ function MemberOne() {
              </motion.div>
           )}
 
+          {/* NEW TAB: PROJECT TERMINAL */}
+          {activeTab === 'webprojects' && (
+             <motion.div key="webprojects" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+               <h1 style={{ fontFamily: '"Playfair Display", serif', color: theme.text, fontSize: 'clamp(1.8rem, 5vw, 3rem)', margin: '0 0 10px 0' }}>Project Terminal</h1>
+               <p style={{ color: theme.muted, fontFamily: '"Courier New", monospace', marginBottom: '30px', fontSize: '0.8rem' }}>&gt; INITIALIZING LIVE DEPLOYMENT MODULES...</p>
+               
+               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
+                 {webProjectsData.map((proj) => (
+                   <motion.div 
+                     key={proj.id} 
+                     style={{ backgroundColor: theme.panel, border: `2px solid ${theme.accent}`, padding: '25px', boxShadow: theme.shadow, display: 'flex', flexDirection: 'column', gap: '15px' }}
+                   >
+                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h3 style={{ margin: 0, fontSize: '1.4rem', fontFamily: '"Playfair Display", serif' }}>{proj.title}</h3>
+                        <span style={{ fontSize: '0.7rem', color: theme.muted, fontFamily: '"Courier New", monospace' }}>EXE_00{proj.id}</span>
+                     </div>
+                     <p style={{ fontSize: '0.95rem', lineHeight: '1.6', color: theme.text, flexGrow: 1 }}>{proj.desc}</p>
+                     
+                     <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <a href={proj.vercel} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textDecoration: 'none' }}>
+                          <button style={{ width: '100%', padding: '12px', background: theme.text, color: theme.bg, border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                            Execute Live
+                          </button>
+                        </a>
+                        <a href={proj.github} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textDecoration: 'none' }}>
+                          <button style={{ width: '100%', padding: '12px', background: 'transparent', color: theme.text, border: `1px solid ${theme.text}`, cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                            Source Code
+                          </button>
+                        </a>
+                     </div>
+                   </motion.div>
+                 ))}
+               </div>
+             </motion.div>
+          )}
+
+          {/* COMMUNICATIONS */}
           {activeTab === 'connect' && (
             <motion.div key="connect" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '800px', margin: '0 auto' }}>
               <h1 style={{ fontFamily: '"Playfair Display", serif', color: theme.text, fontSize: 'clamp(1.8rem, 5vw, 3rem)', margin: '0 0 30px 0', borderBottom: `4px double ${theme.border}`, paddingBottom: '15px' }}>Communications</h1>
@@ -267,6 +336,7 @@ function MemberOne() {
         </AnimatePresence>
       </div>
 
+      {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div

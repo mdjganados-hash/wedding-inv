@@ -1,44 +1,70 @@
-import { useState, useContext } from 'react'; // Added useContext
+import { useState, useContext } from 'react'; 
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ThemeContext } from './context/ThemeContext'; // Import your global context
+import { ThemeContext } from './context/ThemeContext'; 
 import sipiImg from './assets/2.2.jpg';
 
 function MemberThree() {
   const [activeTab, setActiveTab] = useState('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
 
-  // 1. PULL GLOBAL STATE (Replaces local isDarkMode useState)
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
-  // --- New Editorial "Newsprint" Theme ---
   const lightTheme = {
-    bg: '#F4F1EA',          // Aged paper
-    panel: '#E8E4D9',       // Folded paper shadow
-    accent: '#222222',      // Ink Black
-    text: '#333333',        // Soft Black
-    muted: '#777777',       
-    border: '#222222',      // Heavy ink lines
+    bg: '#F4F1EA',
+    panel: '#E8E4D9',
+    accent: '#222222',
+    text: '#333333',
+    muted: '#777777',
+    border: '#222222',
     shadow: '6px 6px 0px rgba(0,0,0,0.1)'
   };
 
   const darkTheme = {
-    bg: '#1A1A1A',          // Dark Archive
-    panel: '#242424',       
-    accent: '#E5E0D8',      
-    text: '#E5E0D8',        
-    muted: '#888888',       
-    border: '#E5E0D8',      
+    bg: '#1A1A1A',
+    panel: '#242424',
+    accent: '#E5E0D8',
+    text: '#E5E0D8',
+    muted: '#888888',
+    border: '#E5E0D8',
     shadow: '6px 6px 0px rgba(255,255,255,0.05)'
   };
 
-  // 2. DEFINE THEME BASED ON GLOBAL STATE
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const tabs = [
     { id: 'home', label: 'Front Page' },
     { id: 'about', label: 'Biography' },
+    { id: 'projects', label: 'Projects' }, // NEW TAB
     { id: 'connect', label: 'Classifieds' }
+  ];
+
+  // PROJECT DATA STRUCTURE
+  const projectEntries = [
+    {
+      id: 1,
+      title: "PROJECT TITLE 01",
+      desc: "Detailed description of your first project. Explain the technologies used and the problem this software solves. Keep this concise but informative for the reader.",
+      img: "https://via.placeholder.com/400x250?text=PROJECT+01", // Replace with your image
+      vercel: "https://your-project-link.vercel.app",
+      github: "https://github.com/your-username/repo"
+    },
+    {
+      id: 2,
+      title: "PROJECT TITLE 02",
+      desc: "Detailed description of your second project. Focus on your specific role in development and any unique features implemented in the final build.",
+      img: "https://via.placeholder.com/400x250?text=PROJECT+02", // Replace with your image
+      vercel: "https://your-project-link.vercel.app",
+      github: "https://github.com/your-username/repo"
+    },
+    {
+      id: 3,
+      title: "PROJECT TITLE 03",
+      desc: "Detailed description of your third project. Highlight the challenges faced during the architectural phase and how you overcame them using technical skills.",
+      img: "https://via.placeholder.com/400x250?text=PROJECT+03", // Replace with your image
+      vercel: "https://your-project-link.vercel.app",
+      github: "https://github.com/your-username/repo"
+    }
   ];
 
   const contentVariants = {
@@ -60,7 +86,6 @@ function MemberThree() {
       }}
     >
       
-      {/* Mobile Sidebar Toggle Button */}
       <button 
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         style={{
@@ -73,7 +98,6 @@ function MemberThree() {
         {isSidebarOpen ? '✕' : '☰'}
       </button>
 
-      {/* Sidebar Navigation */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div 
@@ -119,7 +143,6 @@ function MemberThree() {
         boxSizing: 'border-box'
       }}>
         
-        {/* Top Controls - Updated to use toggleTheme from context */}
         <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', gap: '10px', zIndex: 50 }}>
             <button onClick={toggleTheme} style={{ background: theme.bg, border: `1px solid ${theme.text}`, color: theme.text, cursor: 'pointer', padding: '5px 10px', fontSize: '0.7rem', fontWeight: 'bold' }}>
                 {isDarkMode ? 'LIGHT' : 'DARK'}
@@ -161,6 +184,31 @@ function MemberThree() {
               <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', borderBottom: `2px solid ${theme.border}`, paddingBottom: '10px', textTransform: 'uppercase' }}>Biography</h1>
               <div style={{ padding: '30px 0', lineHeight: '1.8', fontSize: '1.1rem' }}>
                  <p><span style={{ fontSize: '4rem', float: 'left', lineHeight: '0.8', paddingRight: '10px' }}>R</span>amiel Jacob Sepe, born on June 7, 2006. Growing up in Parañaque City, Philippines, he developed a strong interest in technology and modern innovations. Currently pursuing a Bachelor of Science in Computer Engineering at the Technological Institute of the Philippines. Through these studies, he continues to build his knowledge, aiming to become a competent professional. Outside of academics, he enjoys the mechanics of cars and motorcycles and exploring culinary experiences.</p>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'projects' && (
+            <motion.div key="projects" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+              <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', borderBottom: `2px solid ${theme.border}`, paddingBottom: '10px', textTransform: 'uppercase', marginBottom: '30px' }}>Project Portfolio</h1>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
+                {projectEntries.map((project) => (
+                  <div key={project.id} style={{ border: `1px solid ${theme.border}`, padding: '15px', backgroundColor: theme.panel, display: 'flex', flexDirection: 'column' }}>
+                    <img src={project.img} alt={project.title} style={{ width: '100%', filter: 'grayscale(100%)', border: `1px solid ${theme.border}`, marginBottom: '15px' }} />
+                    <h3 style={{ fontSize: '1.4rem', textTransform: 'uppercase', margin: '0 0 10px 0', borderBottom: `1px solid ${theme.border}` }}>{project.title}</h3>
+                    <p style={{ fontFamily: '"Courier New", monospace', fontSize: '0.9rem', lineHeight: '1.4', flexGrow: 1, marginBottom: '20px' }}>{project.desc}</p>
+                    
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <a href={project.vercel} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textDecoration: 'none' }}>
+                        <button style={{ width: '100%', background: theme.accent, color: theme.bg, border: 'none', padding: '10px', cursor: 'pointer', fontFamily: 'monospace', fontWeight: 'bold', fontSize: '0.7rem' }}>LIVE SITE</button>
+                      </a>
+                      <a href={project.github} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textDecoration: 'none' }}>
+                        <button style={{ width: '100%', background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, padding: '10px', cursor: 'pointer', fontFamily: 'monospace', fontWeight: 'bold', fontSize: '0.7rem' }}>GITHUB</button>
+                      </a>
+                    </div>
+                  </div>
+                ))}
               </div>
             </motion.div>
           )}

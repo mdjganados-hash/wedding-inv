@@ -9,13 +9,16 @@ import cert2nd from './Membertwo/mlcert.jpg';
 import certChamp from './Membertwo/mlcert2.jpg';
 import excAward from './Membertwo/mlcert3.jpg';
 import excAward2 from './Membertwo/intrams.jpg';
+import projectOneImg from './Membertwo/p1.jpg';
+import projectTwoImg from './Membertwo/p2.jpg';
+import visualArchiveImg from './Membertwo/P3.jpg';
 
 function MemberTwo() {
   const [activeTab, setActiveTab] = useState('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   const [selectedAchievement, setSelectedAchievement] = useState(null);
 
-  // 1. PULL GLOBAL STATE (Replaces local isDarkMode useState)
+  // 1. PULL GLOBAL STATE
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   // --- The System Architect / Emerald & Gold Theme ---
@@ -39,13 +42,13 @@ function MemberTwo() {
     shadow: '0 10px 30px rgba(27, 67, 50, 0.08)'
   };
 
-  // 2. DEFINE THEME BASED ON GLOBAL STATE
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const tabs = [
     { id: 'home', label: 'Primary Terminal' },
     { id: 'about', label: 'Biographical Data' },
     { id: 'achievements', label: 'Milestone Records' },
+    { id: 'projects', label: 'Project Schematics' }, // NEW TAB
     { id: 'connect', label: 'Communications' }
   ];
 
@@ -54,6 +57,33 @@ function MemberTwo() {
     { id: 2, img: cert2nd, title: 'CEA 2nd Place', desc: 'Awarded 2nd Place Certificate for exemplary skills.' },
     { id: 3, img: excAward, title: 'Excellence Award', desc: 'Recognized for outstanding academic and extracurricular excellence.' },
     { id: 4, img: excAward2, title: 'Excellence Award II', desc: 'Continued recognition for dedication and performance.' }
+  ];
+
+  // NEW PROJECT DATA
+  const projectsList = [
+    {
+      id: 1,
+      title: "Enrollment System UI",
+      desc: "Enhanced user interface for a student enrollment system, showcasing modern design principles and responsive layouts.",
+      img: projectOneImg, // Replace with your image
+      vercel: "https://enrollmentstudent.netlify.app",
+      github: "https://github.com/mksalinsub-prog/EnrollmentKarlAlinsub"
+    },
+    {
+      id: 2,
+      title: "Crypto Pulse",
+      desc: "A real-time cryptocurrency tracking application that provides users with up-to-date market data and insights.",
+      img: projectTwoImg, // Replace with your image
+      vercel: "https://crypto-pulse-rosy.vercel.app",
+      github: "https://github.com/mksalinsub-prog/crypto-pulse"
+    },
+    {
+      id: 3,
+      title: "LOGIC DESIGN FOR A +/- CALCULATOR",
+      desc: "A comprehensive logic design project for a basic calculator capable of performing addition and subtraction, utilizing combinational logic circuits.",
+      img: visualArchiveImg, // Replace with your image
+      isVisualOnly: true
+    }
   ];
 
   const contentVariants = {
@@ -121,7 +151,6 @@ function MemberTwo() {
         boxSizing: 'border-box'
       }}>
         
-        {/* Toggle Controls - Updated to use toggleTheme from context */}
         <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 110, display: 'flex', gap: '10px', alignItems: 'center' }}>
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -162,13 +191,11 @@ function MemberTwo() {
           {activeTab === 'about' && (
             <motion.div key="about" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '850px', margin: '0 auto' }}>
               <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(2rem, 5vw, 3rem)', borderBottom: `1px solid ${theme.border}`, paddingBottom: '15px', marginBottom: '30px' }}>Identity Logs</h2>
-              
               <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', lineHeight: '1.8' }}>
                 <section>
                   <h3 style={{ color: theme.accent, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '10px' }}>[ Personal Background ]</h3>
-                  <p style={{ fontSize: '0.95rem' }}>Karl Siegfreid Dela Cruz Alinsub is a 19-year-old Computer Engineering student at TIP Manila residing in Mandaluyong. Driven by curiosity and a strong determination to adapt to the evolving tech landscape, he actively seeks opportunities to expand his expertise.</p>
+                  <p style={{ fontSize: '0.95rem' }}>Karl Siegfreid Dela Cruz Alinsub is a 19-year-old Computer Engineering student at TIP Manila residing in Mandaluyong. Driven by curiosity and a strong determination to adapt to the evolving tech landscape, he actively seeks opportunities to expand his expertise. Known for his natural humor and positive energy, Karl balances a serious dedication to his craft with a competitive spirit and a drive to succeed in all areas of interest.</p>
                 </section>
-
                 <section>
                   <h3 style={{ color: theme.accent, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '10px' }}>[ Core Competencies ]</h3>
                   <ul style={{ listStyleType: 'none', padding: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
@@ -198,6 +225,36 @@ function MemberTwo() {
                 ))}
               </div>
             </motion.div>
+          )}
+
+          {activeTab === 'projects' && (
+             <motion.div key="projects" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+               <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(2rem, 5vw, 3rem)', borderBottom: `1px solid ${theme.border}`, paddingBottom: '15px', marginBottom: '30px' }}>Development Schematics</h2>
+               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+                 {projectsList.map((project) => (
+                   <motion.div key={project.id} style={{ backgroundColor: theme.panel, border: `1px solid ${theme.border}`, padding: '20px', display: 'flex', flexDirection: 'column' }}>
+                     <img src={project.img} alt={project.title} style={{ width: '100%', height: '180px', objectFit: 'cover', marginBottom: '15px', border: `1px solid ${theme.border}` }} />
+                     <h3 style={{ margin: '0 0 10px 0', fontSize: '1.2rem', color: theme.accent, textTransform: 'uppercase' }}>{project.title}</h3>
+                     <p style={{ margin: '0 0 20px 0', fontSize: '0.85rem', color: theme.muted, flexGrow: 1 }}>{project.desc}</p>
+                     
+                     {!project.isVisualOnly ? (
+                       <div style={{ display: 'flex', gap: '10px' }}>
+                         <a href={project.vercel} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textDecoration: 'none' }}>
+                            <button style={{ width: '100%', padding: '10px', background: theme.accent, color: theme.bg, border: 'none', fontWeight: 'bold', fontSize: '0.7rem', cursor: 'pointer' }}>LIVE DEMO</button>
+                         </a>
+                         <a href={project.github} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textDecoration: 'none' }}>
+                            <button style={{ width: '100%', padding: '10px', background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, fontWeight: 'bold', fontSize: '0.7rem', cursor: 'pointer' }}>SOURCE</button>
+                         </a>
+                       </div>
+                     ) : (
+                       <div style={{ padding: '10px', border: `1px dashed ${theme.border}`, textAlign: 'center', fontSize: '0.7rem', color: theme.muted, textTransform: 'uppercase' }}>
+                         Data Module Only
+                       </div>
+                     )}
+                   </motion.div>
+                 ))}
+               </div>
+             </motion.div>
           )}
 
           {activeTab === 'connect' && (

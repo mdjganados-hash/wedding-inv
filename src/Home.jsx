@@ -8,186 +8,270 @@ import karlImg from './assets/2x2.jpg';
 import jicobImg from './assets/2.2.jpg';
 
 function Home() {
-  // 1. Pull the global state from Context API
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
-  // --- Unique Vintage Palette ---
+  // --- Modern Cinematic Palette ---
   const lightTheme = {
-    bg: '#F3EFE7',           
-    cardBg: '#FCFAF5',       
-    accent: '#612929',       
-    metallic: '#a36440',     
-    textMain: '#2C302E',     
-    textMuted: '#706e68',    
-    border: '#D0C9B8',       
-    shadow: '0 10px 25px rgba(41, 97, 87, 0.08)'
+    bg: '#FBFBFB',           
+    cardBg: '#FFFFFF',       
+    accent: '#1A1A1A',       // Sharp Onyx
+    secondary: '#707070',     
+    muted: '#EAEAEA',
+    textMain: '#121212',     
+    textMuted: '#666666',    
+    border: '#E0E0E0',       
+    shadow: '0 20px 40px rgba(0, 0, 0, 0.05)'
   };
 
   const darkTheme = {
-    bg: '#0f0f17',           
-    cardBg: '#172023',       
-    accent: '#43d4cd',       
-    metallic: '#5ba1b6',     
-    textMain: '#E3E6E3',     
-    textMuted: '#849396',    
-    border: '#28363A',       
-    shadow: '0 12px 30px rgba(0, 0, 0, 0.6)'
+    bg: '#080808',           
+    cardBg: '#111111',       
+    accent: '#FFFFFF',       // Clean White
+    secondary: '#A0A0A0',     
+    muted: '#1A1A1A',
+    textMain: '#F2F2F2',     
+    textMuted: '#888888',    
+    border: '#222222',       
+    shadow: '0 25px 50px rgba(0, 0, 0, 0.4)'
   };
 
-  // 2. Define which theme to use based on the context value
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const members = [
     { 
-      id: 'No. 01', 
+      id: '01', 
       name: 'Dwyane Jorge Ganados', 
-      role: 'Computer Engineering Student',
-      desc: 'A dedicated artisan with a profound interest in the mechanical and the electrical. Eager to unearth the workings of modern machinery.',
-      skills: ['C++', 'HTML', 'CSS', 'PYTHON', 'HARDWARE'],
+      role: 'Hardware Specialist',
+      desc: 'An aspiring technologist with an interest in mechanical and electrical systems, exploring how modern technologies function and interact.',
       path: '/member-one',
       img: dwanImg
     },
     { 
-      id: 'No. 02', 
+      id: '02', 
       name: 'Karl Seigfreid Alinsub', 
-      role: 'Computer Engineering Student',
-      desc: 'A scholar of technology and system architecture. Enjoys exploring the delicate interface between hardware and software.',
-      skills: ['C++', 'PYTHON', 'JAVA', 'MYSQL', 'NETWORKING'],
+      role: 'System Architect',
+      desc: 'A scholar of technology and architecture. Exploring the delicate interface between physical hardware and abstract software layers.',
       path: '/member-two',
       img: karlImg
     },
     { 
-      id: 'No. 03', 
+      id: '03', 
       name: 'Ramiel Jicob Sipi', 
-      role: 'Computer Engineering Student',
-      desc: 'A steadfast apprentice of the digital age who endeavors to master his craft. Focused on building a solid foundation of knowledge.',
-      skills: ['HTML', 'CSS', 'C++', 'TROUBLESHOOTING', 'LOGIC'],
+      role: 'Network Correspondent',
+      desc: 'A steadfast apprentice of the digital age. Endeavoring to master his craft through disciplined study and solid knowledge foundations.',
       path: '/member-three',
       img: jicobImg
     },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } }
-  };
-
   return (
     <motion.div 
       animate={{ backgroundColor: theme.bg, color: theme.textMain }}
-      transition={{ duration: 0.6, ease: "easeInOut" }}
+      transition={{ duration: 0.6 }}
       style={{ 
         minHeight: '100vh', 
-        fontFamily: '"Playfair Display", "Georgia", serif',
-        padding: 'clamp(30px, 5vh, 60px) 20px', 
+        // Modern Font Stack: Clean Sans-Serif + Elegant Serif
+        fontFamily: '"Inter", "EB Garamond", serif',
+        padding: 'clamp(40px, 8vh, 100px) 5%', 
         overflowX: 'hidden'
       }}
     >
-      <div style={{ position: 'fixed', top: 0, left: 'clamp(10px, 5vw, 40px)', bottom: 0, width: '1px', backgroundColor: theme.border, zIndex: 0, opacity: 0.5 }} />
-
-      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
         {/* Header Section */}
-        <div style={{ 
+        <header style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
-          alignItems: 'flex-start', 
-          marginBottom: 'clamp(40px, 10vh, 80px)', 
-          paddingLeft: 'clamp(15px, 5vw, 40px)' 
+          alignItems: 'flex-end', 
+          marginBottom: 'clamp(60px, 12vh, 120px)',
+          borderBottom: `1px solid ${theme.border}`,
+          paddingBottom: '30px'
         }}>
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1 }}>
-            <p style={{ fontFamily: '"Courier New", monospace', letterSpacing: '2px', fontSize: 'clamp(0.7rem, 2vw, 0.85rem)', color: theme.textMuted, margin: '0 0 10px 0', textTransform: 'uppercase' }}>
-              Archive / Group 1
-            </p>
-            <h1 style={{ fontSize: 'clamp(2.2rem, 8vw, 4.5rem)', margin: '0', fontWeight: 'normal', color: theme.textMain, lineHeight: '1.1' }}>
-              The Team's <br/> <span style={{ fontStyle: 'italic', color: theme.accent }}>Portfolio</span>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <span style={{ 
+                fontFamily: 'Inter, sans-serif', 
+                fontSize: '0.75rem', 
+                fontWeight: 700, 
+                letterSpacing: '4px', 
+                textTransform: 'uppercase', 
+                color: theme.textMuted 
+            }}>
+              Project Archive 2026
+            </span>
+            <h1 style={{ 
+                fontSize: 'clamp(2.5rem, 10vw, 6rem)', 
+                margin: '10px 0 0 0', 
+                fontWeight: 400, 
+                fontFamily: '"EB Garamond", serif', 
+                lineHeight: 0.9 
+            }}>
+              Creative <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Collective</span>
             </h1>
           </motion.div>
 
-          {/* Global Theme Toggle Button */}
-          <motion.button
-            whileHover={{ scale: 1.1, rotate: 180 }}
-            whileTap={{ scale: 0.9 }}
+          <button
             onClick={toggleTheme}
             style={{
-              background: theme.cardBg,
-              border: `2px solid ${theme.metallic}`,
+              background: 'transparent',
+              border: `1px solid ${theme.border}`,
               borderRadius: '50%',
-              width: 'clamp(50px, 10vw, 65px)', 
-              height: 'clamp(50px, 10vw, 65px)',
+              width: '60px', height: '60px',
               display: 'flex', justifyContent: 'center', alignItems: 'center',
-              cursor: 'pointer', color: theme.metallic, fontSize: 'clamp(1.2rem, 4vw, 1.8rem)',
-              outline: 'none', boxShadow: theme.shadow,
-              transition: 'all 0.3s',
-              flexShrink: 0
+              cursor: 'pointer', color: theme.textMain, fontSize: '1.2rem',
+              transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)'
             }}
           >
-            {isDarkMode ? '☽' : '☀'}
-          </motion.button>
-        </div>
+            {isDarkMode ? '☼' : '☾'}
+          </button>
+        </header>
         
-        {/* Dossier Cards Grid */}
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 'clamp(20px, 4vw, 40px)', 
-            marginBottom: '100px', 
-            paddingLeft: 'clamp(15px, 5vw, 40px)' 
-          }}
-        >
+        {/* Profile Cards */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '40px', 
+          marginBottom: '150px'
+        }}>
           {members.map((member) => (
-            <motion.div key={member.id} variants={itemVariants} whileHover={{ y: -5, boxShadow: theme.shadow }} style={{ backgroundColor: theme.cardBg, padding: '6px', border: `1px solid ${theme.border}`, boxShadow: '0 4px 10px rgba(0,0,0,0.05)', transition: 'all 0.4s ease' }}>
-              <div style={{ border: `1px solid ${theme.border}`, padding: 'clamp(15px, 4vw, 30px)', height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                <div style={{ position: 'absolute', top: '-12px', left: '20px', backgroundColor: theme.cardBg, padding: '0 10px', color: theme.metallic, fontFamily: '"Courier New", monospace', fontSize: '0.8rem', fontWeight: 'bold' }}>{member.id}</div>
-                <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '20px', marginTop: '5px' }}>
-                  <div style={{ width: '60px', height: '60px', border: `2px solid ${theme.accent}`, borderRadius: '50%', overflow: 'hidden', padding: '2px', flexShrink: 0 }}>
-                    <img src={member.img} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', filter: isDarkMode ? 'sepia(0.3) brightness(0.9)' : 'sepia(0.2) contrast(1.1)' }} />
+            <motion.div 
+              key={member.id} 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              style={{ position: 'relative', group: 'true' }}
+            >
+              <Link to={member.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <motion.div 
+                  whileHover={{ y: -10 }}
+                  style={{ 
+                    backgroundColor: theme.cardBg, 
+                    border: `1px solid ${theme.border}`,
+                    padding: '40px',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    boxShadow: theme.shadow
+                  }}
+                >
+                  <span style={{ 
+                    fontFamily: 'Inter, sans-serif', 
+                    fontSize: '3rem', 
+                    fontWeight: 900, 
+                    color: theme.muted,
+                    lineHeight: 1,
+                    marginBottom: '20px'
+                  }}>
+                    {member.id}
+                  </span>
+
+                  <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '30px' }}>
+                    <img 
+                      src={member.img} 
+                      alt={member.name} 
+                      style={{ 
+                        width: '80px', height: '80px', 
+                        objectFit: 'cover', borderRadius: '50%',
+                        filter: isDarkMode ? 'grayscale(100%) brightness(0.8)' : 'grayscale(100%)'
+                      }} 
+                    />
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 500, fontFamily: '"EB Garamond", serif' }}>{member.name}</h3>
+                      <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '2px', color: theme.textMuted }}>{member.role}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 style={{ margin: '0 0 2px 0', fontSize: '1.2rem', fontWeight: 'normal', lineHeight: '1.2' }}>{member.name}</h3>
-                    <p style={{ margin: 0, fontSize: '0.7rem', color: theme.accent, textTransform: 'uppercase', letterSpacing: '1px', fontFamily: '"Courier New", monospace', fontWeight: 'bold' }}>{member.role}</p>
+
+                  <p style={{ 
+                    fontSize: '1rem', 
+                    lineHeight: 1.6, 
+                    color: theme.textMuted,
+                    marginBottom: '40px',
+                    flexGrow: 1 
+                  }}>
+                    {member.desc}
+                  </p>
+
+                  <div style={{ 
+                    borderTop: `1px solid ${theme.border}`, 
+                    paddingTop: '20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase' }}>View Case Study</span>
+                    <span style={{ fontSize: '1.2rem' }}>→</span>
                   </div>
-                </div>
-                <p style={{ color: theme.textMuted, fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '20px', flexGrow: 1 }}>{member.desc}</p>
-                <div style={{ textAlign: 'right', borderTop: `1px solid ${theme.border}`, paddingTop: '12px' }}>
-                  <Link to={member.path} style={{ textDecoration: 'none' }}>
-                    <motion.span whileHover={{ color: theme.accent, letterSpacing: '2px' }} style={{ fontSize: '0.75rem', color: theme.textMain, textTransform: 'uppercase', fontFamily: '"Courier New", monospace', fontWeight: 'bold', display: 'inline-block' }}>Check Profile →</motion.span>
-                  </Link>
-                </div>
-              </div>
+                </motion.div>
+              </Link>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Featured Project */}
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '60px', padding: '0 10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
-            <div style={{ width: '30px', height: '1px', backgroundColor: theme.metallic }} />
-            <span style={{ fontFamily: '"Courier New", monospace', letterSpacing: '2px', fontSize: '0.7rem', color: theme.metallic, textTransform: 'uppercase' }}>Featured Project</span>
-            <div style={{ width: '30px', height: '1px', backgroundColor: theme.metallic }} />
-          </div>
-          <h2 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', margin: '0 0 30px 0', fontWeight: 'normal', color: theme.textMain }}>The Wedding <span style={{ fontStyle: 'italic', color: theme.accent }}>Invitation</span></h2>
+        {/* Invitation Section */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          style={{ 
+            border: `1px solid ${theme.border}`,
+            padding: '80px 20px',
+            textAlign: 'center',
+            backgroundColor: theme.cardBg
+          }}
+        >
+          <span style={{ letterSpacing: '5px', textTransform: 'uppercase', fontSize: '0.7rem', fontWeight: 700, color: theme.textMuted }}>Special Event</span>
+          <h2 style={{ 
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
+            fontFamily: '"EB Garamond", serif', 
+            margin: '20px 0 40px 0' 
+          }}>
+            Dexter & Rita's <span style={{ fontStyle: 'italic' }}>Wedding</span>
+          </h2>
+
           <Link to="/wedding" style={{ textDecoration: 'none', display: 'inline-block' }}>
-            <motion.div whileHover={{ y: -10 }} whileTap={{ scale: 0.95 }} style={{ cursor: 'pointer', position: 'relative', width: '100%', maxWidth: '240px' }}>
-              <svg width="100%" height="auto" viewBox="0 0 240 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="5" y="5" width="230" height="150" fill={theme.cardBg} stroke={theme.border} strokeWidth="2"/>
-                <path d="M5 5 L120 90 L235 5" fill={isDarkMode ? '#1E292D' : '#F6F3EC'} stroke={theme.border} strokeWidth="2"/>
-                <circle cx="120" cy="90" r="24" fill={theme.accent} />
+            <motion.div 
+              whileHover={{ scale: 1.05 }} 
+              whileTap={{ scale: 0.95 }} 
+              style={{ cursor: 'pointer', width: '240px', margin: '0 auto' }}
+            >
+              <svg width="240" height="160" viewBox="0 0 240 160" fill="none">
+                <rect x="5" y="5" width="230" height="150" fill={theme.bg} stroke={theme.textMain} strokeWidth="1"/>
+                <path d="M5 5 L120 90 L235 5" fill="transparent" stroke={theme.textMain} strokeWidth="1"/>
+                <circle cx="120" cy="90" r="20" fill={theme.textMain} />
+                <text x="116" y="97" fill={theme.bg} style={{ fontSize: '14px', fontWeight: 'bold' }}>♥</text>
               </svg>
             </motion.div>
           </Link>
-          <p style={{ color: theme.textMuted, fontSize: '0.85rem', marginTop: '20px', fontStyle: 'italic', maxWidth: '300px' }}>Click the invitation to reveal the ceremony details.</p>
+          
+          <p style={{ 
+            marginTop: '40px', 
+            fontSize: '0.8rem', 
+            textTransform: 'uppercase', 
+            letterSpacing: '3px',
+            color: theme.textMuted
+          }}>
+            Click to open invitation
+          </p>
         </motion.div>
+
+        {/* Footer Stamp */}
+        <footer style={{ marginTop: '100px', paddingBottom: '40px', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.7rem', letterSpacing: '10px', textTransform: 'uppercase', opacity: 0.3 }}>
+              Technological Institute of the Philippines
+            </p>
+        </footer>
+
       </div>
+
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+          
+          body {
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+          }
+        `}
+      </style>
     </motion.div>
   );
 }

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeContext } from './context/ThemeContext'; 
 import sipiImg from './assets/2.2.jpg';
+import cert from './Memberthree/cert.jpg';
+import p1 from './Memberthree/pr1.jpg';
 
 function MemberThree() {
   const [activeTab, setActiveTab] = useState('home');
@@ -35,35 +37,30 @@ function MemberThree() {
   const tabs = [
     { id: 'home', label: 'Front Page' },
     { id: 'about', label: 'Biography' },
-    { id: 'projects', label: 'Projects' }, // NEW TAB
+    { id: 'projects', label: 'Projects' },
+    { id: 'milestones', label: 'Milestones' }, // NEW TAB
     { id: 'connect', label: 'Classifieds' }
   ];
 
-  // PROJECT DATA STRUCTURE
+  // PROJECT DATA STRUCTURE - Reduced to 1
   const projectEntries = [
     {
       id: 1,
-      title: "PROJECT TITLE 01",
-      desc: "Detailed description of your first project. Explain the technologies used and the problem this software solves. Keep this concise but informative for the reader.",
-      img: "https://via.placeholder.com/400x250?text=PROJECT+01", // Replace with your image
-      vercel: "https://your-project-link.vercel.app",
-      github: "https://github.com/your-username/repo"
-    },
+      title: "CRYPTO PULSE",
+      desc: "A cryptocurrency price tracking web application built with React and Tailwind CSS. It features real-time price updates, historical data visualization, and a user-friendly interface for monitoring the crypto market.",
+      img: p1, 
+      vercel: "https://crypto-pulse-plum.vercel.app",
+      github: "https://github.com/mrjsepe-byte/crypto-pulse"
+    }
+  ];
+
+  // MILESTONE DATA STRUCTURE - 1 Blank
+  const milestoneEntries = [
     {
-      id: 2,
-      title: "PROJECT TITLE 02",
-      desc: "Detailed description of your second project. Focus on your specific role in development and any unique features implemented in the final build.",
-      img: "https://via.placeholder.com/400x250?text=PROJECT+02", // Replace with your image
-      vercel: "https://your-project-link.vercel.app",
-      github: "https://github.com/your-username/repo"
-    },
-    {
-      id: 3,
-      title: "PROJECT TITLE 03",
-      desc: "Detailed description of your third project. Highlight the challenges faced during the architectural phase and how you overcame them using technical skills.",
-      img: "https://via.placeholder.com/400x250?text=PROJECT+03", // Replace with your image
-      vercel: "https://your-project-link.vercel.app",
-      github: "https://github.com/your-username/repo"
+      id: 1,
+      title: "75 OJT HOURS COMPLETED",
+      desc: "Successfully completed 75 hours of On-the-Job Training (OJT) at a local tech company, gaining hands-on experience in software development and project management. This milestone reflects dedication to practical learning and professional growth in the field of computer engineering.",
+      img: cert
     }
   ];
 
@@ -194,10 +191,10 @@ function MemberThree() {
               
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
                 {projectEntries.map((project) => (
-                  <div key={project.id} style={{ border: `1px solid ${theme.border}`, padding: '15px', backgroundColor: theme.panel, display: 'flex', flexDirection: 'column' }}>
+                  <div key={project.id} style={{ border: `1px solid ${theme.border}`, padding: '15px', backgroundColor: theme.panel, display: 'flex', flexDirection: 'column', maxWidth: '450px' }}>
                     <img src={project.img} alt={project.title} style={{ width: '100%', filter: 'grayscale(100%)', border: `1px solid ${theme.border}`, marginBottom: '15px' }} />
                     <h3 style={{ fontSize: '1.4rem', textTransform: 'uppercase', margin: '0 0 10px 0', borderBottom: `1px solid ${theme.border}` }}>{project.title}</h3>
-                    <p style={{ fontFamily: '"Courier New", monospace', fontSize: '0.9rem', lineHeight: '1.4', flexGrow: 1, marginBottom: '20px' }}>{project.desc}</p>
+                    <p style={{ fontFamily: '"Courier New", Courier, monospace', fontSize: '0.9rem', lineHeight: '1.4', flexGrow: 1, marginBottom: '20px' }}>{project.desc}</p>
                     
                     <div style={{ display: 'flex', gap: '10px' }}>
                       <a href={project.vercel} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textDecoration: 'none' }}>
@@ -207,6 +204,23 @@ function MemberThree() {
                         <button style={{ width: '100%', background: 'transparent', border: `1px solid ${theme.accent}`, color: theme.accent, padding: '10px', cursor: 'pointer', fontFamily: 'monospace', fontWeight: 'bold', fontSize: '0.7rem' }}>GITHUB</button>
                       </a>
                     </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'milestones' && (
+            <motion.div key="milestones" variants={contentVariants} initial="hidden" animate="visible" exit="exit" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+              <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', borderBottom: `2px solid ${theme.border}`, paddingBottom: '10px', textTransform: 'uppercase', marginBottom: '30px' }}>Milestone Records</h1>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
+                {milestoneEntries.map((milestone) => (
+                  <div key={milestone.id} style={{ border: `1px solid ${theme.border}`, padding: '15px', backgroundColor: theme.panel, display: 'flex', flexDirection: 'column', maxWidth: '450px' }}>
+                    <img src={milestone.img} alt={milestone.title} style={{ width: '100%', filter: 'grayscale(100%)', border: `1px solid ${theme.border}`, marginBottom: '15px' }} />
+                    <h3 style={{ fontSize: '1.4rem', textTransform: 'uppercase', margin: '0 0 10px 0', borderBottom: `1px solid ${theme.border}` }}>{milestone.title}</h3>
+                    <p style={{ fontFamily: '"Courier New", Courier, monospace', fontSize: '0.9rem', lineHeight: '1.4', flexGrow: 1 }}>{milestone.desc}</p>
+                    <div style={{ marginTop: '20px', textAlign: 'center', borderTop: `1px dashed ${theme.border}`, paddingTop: '10px', fontSize: '0.7rem', textTransform: 'uppercase' }}>Verified Entry</div>
                   </div>
                 ))}
               </div>
